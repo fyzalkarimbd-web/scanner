@@ -1,3 +1,5 @@
+<!-- Passport & NID scanner -->
+
 <!-- SCRIPT 1: Globals & Basic Utils -->
 
 let cvLoaded=!1;const imageStates={front:{input:null,canvas:null,ctx:null,loupe:null,loupeCtx:null,image:null,points:[],activePoint:-1,originalCropped:null,croppedResult:null,filterLevel:0},back:{input:null,canvas:null,ctx:null,loupe:null,loupeCtx:null,image:null,points:[],activePoint:-1,originalCropped:null,croppedResult:null,filterLevel:0}};function setActiveMode(l){document.querySelectorAll(".mode-card-btn").forEach(l=>l.classList.remove("active"));let e=document.getElementById(l);e&&e.classList.add("active")}
