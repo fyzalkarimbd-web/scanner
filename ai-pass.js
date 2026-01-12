@@ -1,4 +1,3 @@
-/* AI Passport Tool Logic */
 const aiPrompts = {
     male: "From any photo of any size or head position, create a passport-style front-facing headshot. The face shape, proportions, and features should not be altered in any way — not even slightly. Just adjust the head position so that the person is looking directly at the camera. Keep the natural face exactly as it is. Lighten the skin evenly all over to keep it realistic. Remove any acne, blemishes, or spots from the skin and maintain natural texture. Remove all shadows, harsh lights, or reflections to ensure even, balanced lighting. Keep the original clothing color but the clothing will look clean and new. Use a white background with no shadows. The photo should be high resolution, with the head occupying 70-80% of the frame, perfectly centered, and vertically aligned. Automatically crop the photo to standard passport size (2x2 inches / 600x600 px).",
     female: "From any photo of any size or head position, create a passport-style front-facing headshot. The face shape, proportions, and features should not be altered in any way — not even slightly. Just adjust the head position so that the person is looking directly at the camera. Keep the natural face exactly as it is. Lighten the skin evenly in all areas to keep it realistic. Remove any acne, blemishes, or spots from the skin and maintain natural texture. Remove all shadows, harsh lights, or reflections to ensure even, balanced lighting. Both ears should be fully visible. Keep the original clothing color but the clothing will be clean new. Use a white background with no shadows. The photo should be high resolution, with the head occupying 70-80% of the frame, perfectly centered, and vertically aligned. Automatically crop the photo to standard passport size (2x2 inches / 600x600 px).",
@@ -112,16 +111,15 @@ function processAiPassport(type) {
     window.open(aiUrl, "_blank");
 }
 
-/* এই ফাংশনগুলো নিশ্চিত করুন ঠিক আছে কিনা */
 function showAiDemo(num) {
-    var box = document.getElementById("aiDemoBox" + num);
+    let box = document.getElementById("aiDemoBox" + num);
     if (box) {
         box.style.display = "flex";
     }
 }
 
 function hideAiDemo(num) {
-    var box = document.getElementById("aiDemoBox" + num);
+    let box = document.getElementById("aiDemoBox" + num);
     if (box) {
         box.style.display = "none";
     }
