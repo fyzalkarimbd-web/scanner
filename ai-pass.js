@@ -10,7 +10,8 @@ const aiTranslations = {
     en: {
         title: "AI Passport Photo Lab",
         sub: "Click a card to auto-copy the prompt and open Google AI Studio instantly.",
-        demoBtn: "<i class='fa-solid fa-eye'></i> View Demo Guide",
+        demoBtn1: "<i class='fa-solid fa-eye'></i> View Demo Guide",
+        demoBtn2: "<i class='fa-solid fa-eye'></i> Photo sample",
         male: "Male Passport Photo",
         smale: "Clean skin, sharp suit, white background",
         female: "Female Passport Photo",
@@ -28,7 +29,8 @@ const aiTranslations = {
     bn: {
         title: "এআই পাসপোর্ট ছবি ল্যাব",
         sub: "বাটন ক্লিক করলে প্রম্পট অটোমেটিক কপি হয়ে গুগল এআই স্টুডিও ওপেন হবে।",
-        demoBtn: "<i class='fa-solid fa-eye'></i> ব্যবহার পদ্ধতি দেখুন",
+        demoBtn1: "<i class='fa-solid fa-eye'></i> ১ম গাইড দেখুন",
+        demoBtn2: "<i class='fa-solid fa-eye'></i> ২য় গাইড দেখুন",
         male: "ছেলেদের পাসপোর্ট ছবি",
         smale: "পরিষ্কার ত্বক, ফরমাল পোশাক ও সাদা ব্যাকগ্রাউন্ড",
         female: "মেয়েদের পাসপোর্ট ছবি",
@@ -60,7 +62,8 @@ function closeAiPassportModal() {
 function switchAiLang(lang) {
     const modal = document.getElementById("aiPassportModal");
     const title = document.getElementById("ai-title");
-    const demoBtn = document.getElementById("ai-demo-btn");
+    const demoBtn1 = document.getElementById("ai-demo-btn-1");
+    const demoBtn2 = document.getElementById("ai-demo-btn-2");
     
     document.getElementById("ai-tab-en").classList.toggle("active", lang === "en");
     document.getElementById("ai-tab-bn").classList.toggle("active", lang === "bn");
@@ -68,17 +71,22 @@ function switchAiLang(lang) {
     if(lang === "bn") {
         modal.classList.add("lang-bn");
         title.style.fontFamily = "'SolaimanLipi', sans-serif";
-        if(demoBtn) demoBtn.style.fontFamily = "'SolaimanLipi', sans-serif";
+        if(demoBtn1) demoBtn1.style.fontFamily = "'SolaimanLipi', sans-serif";
+        if(demoBtn2) demoBtn2.style.fontFamily = "'SolaimanLipi', sans-serif";
     } else {
         modal.classList.remove("lang-bn");
         title.style.fontFamily = "'Inter', sans-serif";
-        if(demoBtn) demoBtn.style.fontFamily = "'Inter', sans-serif";
+        if(demoBtn1) demoBtn1.style.fontFamily = "'Inter', sans-serif";
+        if(demoBtn2) demoBtn2.style.fontFamily = "'Inter', sans-serif";
     }
 
     const t = aiTranslations[lang];
     title.innerHTML = '<i class="fa-solid fa-robot"></i> ' + t.title;
     document.getElementById("ai-sub").innerHTML = t.sub;
-    if(demoBtn) demoBtn.innerHTML = t.demoBtn;
+    
+    if(demoBtn1) demoBtn1.innerHTML = t.demoBtn1;
+    if(demoBtn2) demoBtn2.innerHTML = t.demoBtn2;
+
     document.getElementById("txt-male").innerText = t.male;
     document.getElementById("sub-male").innerText = t.smale;
     document.getElementById("txt-female").innerText = t.female;
@@ -101,14 +109,14 @@ function processAiPassport(type) {
     document.execCommand('copy');
     document.body.removeChild(el);
 
-    const aiUrl = "https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image";
+    const aiUrl = "https://aistudio.google.com/prompts/new_chat?model=gemini-2.0-flash-exp";
     window.open(aiUrl, "_blank");
 }
 
-/* AI Demo Functions */
-function showAiDemo() {
-    document.getElementById("aiDemoBox").style.display = "flex";
+/* Updated AI Demo Functions to handle multiple boxes */
+function showAiDemo(num) {
+    document.getElementById("aiDemoBox" + num).style.display = "flex";
 }
-function hideAiDemo() {
-    document.getElementById("aiDemoBox").style.display = "none";
+function hideAiDemo(num) {
+    document.getElementById("aiDemoBox" + num).style.display = "none";
 }
