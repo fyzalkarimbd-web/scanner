@@ -94,11 +94,7 @@ window.processAiPassport = function(type) {
     el.value = promptText;
     document.body.appendChild(el);
     el.select();
-    try {
-        document.execCommand('copy');
-    } catch (err) {
-        console.error('Copy failed', err);
-    }
+    document.execCommand('copy');
     document.body.removeChild(el);
     window.open("https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image", "_blank");
 };
