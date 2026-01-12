@@ -1,28 +1,3 @@
-@import url(&#39;https://fonts.maateen.me/solaiman-lipi/font.css&#39;);
-
-#aiPassportModal .cp-box { font-family: &#39;Inter&#39;, sans-serif; }
-
-#aiPassportModal i.fa-solid, 
-#aiPassportModal .fa-robot,
-#aiPassportModal .ai-option-card i,
-#aiPassportModal .close-ai-demo i {
-    font-family: &quot;Font Awesome 6 Free&quot; !important;
-    font-weight: 900 !important;
-    display: inline-block !important;
-    font-style: normal !important;
-}
-
-#aiPassportModal.lang-bn #ai-title,
-#aiPassportModal.lang-bn #ai-sub,
-#aiPassportModal.lang-bn .ai-option-card strong,
-#aiPassportModal.lang-bn .ai-option-card span,
-#aiPassportModal.lang-bn .ai-demo-trigger,
-#aiPassportModal.lang-bn #ins-head,
-#aiPassportModal.lang-bn #ins-body,
-#ai-tab-bn {
-    font-family: &#39;SolaimanLipi&#39;, sans-serif !important;
-}
-
 .ai-demo-btn-group {
     display: flex;
     justify-content: center;
