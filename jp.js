@@ -165,14 +165,21 @@ function downloadJointPro(t) {
 
     if ("jpg" === t) {
         let link = document.createElement("a");
-        link.download = "Joint_Photo.jpg"; link.href = n; link.click();
+        link.download = "Joint_Photo.jpg";
+        link.href = n;
+        link.click();
     } else {
         let { jsPDF: i } = window.jspdf,
             pdf = new i("p", "mm", "a4");
 
-        const imgW = 48.26, imgH = 38.1, gap = 5;
-        let startX = (210 - (imgW * cols + (cols - 1) * gap)) / 2;
-        let startY = 10;
+        // ফটো সাইজ এবং গ্যাপ (গ্যাপ ৫ থেকে বাড়িয়ে ৮ করা হয়েছে)
+        const imgW = 48.26; 
+        const imgH = 38.1;
+        const gap = 8; // ছবির মাঝখানের গ্যাপ এখন ৮ মিমি
+
+        let totalW = imgW * cols + (cols - 1) * gap;
+        let startX = (210 - totalW) / 2;
+        let startY = 15; // উপরের মার্জিন ১৫ মিমি
 
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
@@ -185,8 +192,15 @@ function downloadJointPro(t) {
         }
 
         if ("print" === t) {
+            // এটি ফাইল ডাউনলোড না করে সরাসরি প্রিন্ট উইন্ডো ওপেন করার চেষ্টা করবে
             pdf.autoPrint();
-            window.open(pdf.output('bloburl'), '_blank');
+            const blobUrl = pdf.output('bloburl');
+            const printWindow = window.open(blobUrl, '_blank');
+            if (printWindow) {
+                printWindow.focus();
+            } else {
+                alert("Please allow popups to use the print feature.");
+            }
         } else {
             pdf.save("Joint_Photo_A4.pdf");
         }
