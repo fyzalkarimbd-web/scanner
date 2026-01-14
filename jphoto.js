@@ -185,7 +185,7 @@ function downloadJointPro(t) {
 
         // বাম দিকের গ্যাপ ম্যানুয়ালি সেট করা হলো
         // আপনি চাইলে ১০ এর জায়গায় ৫ বা ১৫ দিয়ে চেক করে দেখতে পারেন
-        let startX = 10; 
+        let startX = 5; 
 
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
