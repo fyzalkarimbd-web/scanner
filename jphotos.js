@@ -179,7 +179,7 @@ function downloadJointPro(t) {
         const imgH = 38.1;  
         
         // মার্জিন সেটিংস
-        const startX = 3;   
+        const startX = 2;   
         const startY = 3;   
         
         const gapX = 3;   
