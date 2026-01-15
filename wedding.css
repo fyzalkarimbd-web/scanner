@@ -1,13 +1,4 @@
-.wdm-modal-width { max-width: 950px !important; width: 95% !important; }
-.wdm-container { 
-    background: #fff; border-radius: 20px; padding: 20px; 
-    font-family: &#39;SolaimanLipi&#39;, sans-serif !important; 
-}
 
-/* Force Font for Input Preview */
-.wdm-container input, .wdm-container textarea, .wdm-container select, #wdm-card-preview {
-    font-family: &#39;SolaimanLipi&#39;, Arial, sans-serif !important;
-}
 
 /* Perfect A4 Frame - Overflow Fixed */
 #wdm-card-preview {
