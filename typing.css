@@ -39,8 +39,6 @@
 .a4-container-wrapper {
     background: #64748b; /* Professional Dark Background for Focus */
     padding: 40px 10px;
-    overflow-y: auto;
-    max-height: 65vh;
     border: 1px solid #cbd5e1;
     border-top: none;
     display: flex;
