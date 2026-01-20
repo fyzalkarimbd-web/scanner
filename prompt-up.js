@@ -55,6 +55,7 @@ const promptData = [
 
     // --- CLOTHES (পোশাক) --- 11 Prompts
     { cat_en: "Clothes", cat_bn: "পোশাক", title_en: "Clothing is new", title_bn: "পোশাক নতুন করা", prompt: "The clothes will be new and clean." },
+    { cat_en: "Clothes", cat_bn: "পোশাক", title_en: "Professional Suit", title_bn: "প্রফেশনাল স্যুট", prompt: "Dress the person in a formal grey business suit." },
     { cat_en: "Clothes", cat_bn: "পোশাক", title_en: "Add Professional Tie", title_bn: "টাই যুক্ত করা", prompt: "Add a professional red silk tie, neatly tied under the collar." },
     { cat_en: "Clothes", cat_bn: "পোশাক", title_en: "Wear Business Suit", title_bn: "স্যুট বা কোট পরানো", prompt: "Dress the person in a professional dark navy blue business suit with a white shirt and a tie." },
     { cat_en: "Clothes", cat_bn: "পোশাক", title_en: "Change to White Shirt", title_bn: "শার্ট পরিয়ে দেওয়া", prompt: "Change the current attire to a formal white collared shirt, fully buttoned." },
