@@ -1,0 +1,96 @@
+.crop-modal-content {
+    max-width: 1100px;
+    width: 95%;
+    margin: 20px auto;
+}
+
+.joiner-upload-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+}
+
+.st-upload-area { 
+    border: 2px dashed #cbd5e1; 
+    padding: 25px; 
+    border-radius: 15px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    background: #f8fafc; 
+}
+.st-upload-area:hover { border-color: #f43f5e; background: #fff1f2; }
+.st-upload-area i { font-size: 32px; margin-bottom: 8px; }
+.st-upload-area p { margin: 0; font-weight: 800; font-size: 14px; color: #475569; font-family: &#39;Inter&#39;, sans-serif; }
+
+/* --- Beautiful Magic Button Styling --- */
+.magic-scan-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #4f46e5, #8b5cf6, #ec4899);
+    background-size: 200% 200%;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(124, 58, 237, 0.4);
+    animation: gradientAnim 3s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: &#39;Inter&#39;, sans-serif;
+    font-size: 14px;
+}
+
+.magic-scan-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.6);
+    filter: brightness(1.1);
+}
+
+.magic-scan-btn:active {
+    transform: translateY(1px);
+}
+
+@keyframes gradientAnim {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.crop-point {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #f43f5e;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    z-index: 1001;
+    touch-action: none;
+    cursor: move;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.crop-point:active { background: #059669; transform: scale(1.2); }
+#selection-canvas { border-radius: 0px; display: block; max-width: 100%; height: auto; }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .joiner-upload-grid { grid-template-columns: 1fr; }
+    .crop-point { width: 24px; height: 24px; margin-left: -12px; margin-top: -12px; }
+    #tele-tool-title { font-size: 18px; }
+    .crop-modal-content { width: 98%; padding: 5px; margin: 10px auto; }
+    
+    /* Zoom Glass on Mobile */
+    #zoom-glass { width: 100px !important; height: 100px !important; }
+    #zoom-canvas { width: 200px !important; height: 200px !important; } 
+}
+
+@media (max-width: 480px) {
+    .actions { grid-template-columns: 1fr !important; }
+    .toolbar-row button { font-size: 12px; padding: 8px 15px; }
+}
