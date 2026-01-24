@@ -1,0 +1,31 @@
+.pnd-solaiman {
+    font-family: &#39;SolaimanLipi&#39;, Arial, sans-serif !important;
+}
+
+#pndModal .ph-tab {
+    border: none;
+    padding: 8px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 13px;
+    transition: 0.3s;
+    background: transparent;
+    color: #64748b;
+}
+
+#pndModal .ph-tab.active {
+    background: #4f46e5;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+@media (max-width: 600px) {
+    .pnd-preview-container { height: 250px !important; }
+    #pnd-main-title { font-size: 18px !important; }
+}
+
+#pnd-canvas {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
