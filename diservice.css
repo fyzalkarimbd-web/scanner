@@ -1,0 +1,67 @@
+.wa-master-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+    /* উচ&#2509;চত&#2494;র স&#2496;ম&#2494;বদ&#2509;ধত&#2494; ত&#2497;ল&#2503; দ&#2503;ওয়&#2494; হয়&#2503;ছ&#2503; */
+  }
+
+  .wa-card-item {
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+
+  .wa-card-item:hover {
+    transform: translateY(-5px);
+    border-color: #25D366;
+    background: #f0fff4;
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.1);
+  }
+
+  .wa-card-item i {
+    font-size: 32px;
+    color: #7c3aed;
+    margin-bottom: 12px;
+    transition: 0.3s;
+  }
+
+  .wa-card-item:hover i {
+    color: #25D366;
+    transform: scale(1.1);
+  }
+
+  .wa-card-item span {
+    font-weight: 800;
+    font-size: 14px;
+    color: #1e293b;
+    line-height: 1.3;
+    font-family: &quot;SolaimanLipi&quot;, sans-serif;
+  }
+
+  .btn-wa-order {
+    margin-top: 12px;
+    background: #25D366;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 20px;
+    border-radius: 50px;
+    display: inline-block;
+  }
+
+  @media (max-width: 480px) {
+    .wa-master-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .wa-card-item { min-height: 130px; }
+    .wa-card-item span { font-size: 13px; }
+  }
