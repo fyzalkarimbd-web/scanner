@@ -46,7 +46,7 @@
       { name: "France (Egypt Trip)", flag: "fr", url: "https://www.atlys.com/tools/france-visa-status-checker" },
       { name: "Maldives", flag: "mv", url: "https://www.immigration.gov.mv/visa/status" },
       { name: "Japan (Jeju Air)", flag: "jp", url: "https://www.atlys.com/tools/japan-visa-status-checker" },
-      { name: "Bahrain", flag: "bh", url: "www.evisa.gov.bh/VISA/visaInput?nav=E01&E01=e" },
+      { name: "Bahrain", flag: "bh", url: "https://www.lmra.gov.bh/EMS_Web/checkEligibilityRW.action?methodName=loadPageInEnglish" },
       { name: "Kenya", flag: "ke", url: "https://etakenya.go.ke/" },
       { name: "Ethiopia", flag: "et", url: "https://www.evisa.gov.et/visa-extension" },
       { name: "Ethiopia (EG)", flag: "et", url: "https://www.evisa.gov.et/#/checkstatus" },
