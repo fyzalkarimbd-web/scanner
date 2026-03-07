@@ -284,7 +284,6 @@
       .features-list { grid-template-columns: 1fr; }
   }
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
   /* Global Reset */
   * { box-sizing: border-box; margin: 0; padding: 0; }
