@@ -5,9 +5,21 @@
     window.showDateConverter = function() {
         try { if (typeof setActiveMode === 'function') setActiveMode('mode-date-converter'); } catch(e) {}
         const modal = document.getElementById("dateConverterModal");
+        const dateInput = document.getElementById('eng-date-input');
+        
         if (modal) {
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
+
+            // বর্তমান তারিখ (Today's Date) সিলেক্ট করার লজিক
+            if (dateInput && !dateInput.value) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+
             switchDateLang('bn');
         }
     };
@@ -121,11 +133,9 @@
             const originalText = btn.innerText;
             const originalBg = btn.style.background;
             
-            // বাটন টেক্সট পরিবর্তন
             btn.innerText = (currentUI_Lang === 'bn' ? "কপি হয়েছে!" : "Copied!");
-            btn.style.background = "#10b981"; // সবুজ কালার
+            btn.style.background = "#10b981";
 
-            // ২ সেকেন্ড পর রিসেট
             setTimeout(() => {
                 btn.innerText = originalText;
                 btn.style.background = originalBg;
