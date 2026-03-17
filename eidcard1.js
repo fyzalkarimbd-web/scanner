@@ -1,32 +1,4 @@
-/* 
- * Unauthorized copying or redistribution of this code is strictly prohibited.
- * Locked to: idcardscannerpro.com, www.idcardscannerpro.com
- */
-(function() {
-    // অনুমোদিত ডোমেইন লিস্ট
-    var allowedDomains = ["idcardscannerpro.com", "www.idcardscannerpro.com"];
-    var currentHost = window.location.hostname.toLowerCase();
 
-    // চেক করা হচ্ছে ডোমেইন ঠিক আছে কি না
-    if (allowedDomains.indexOf(currentHost) === -1) {
-        // যদি ডোমেইন না মিলে তবে স্ক্রিন লক করে দেবে
-        document.documentElement.innerHTML = `
-        <div style="background:#0f172a; color:#f1f5f9; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:sans-serif; padding:20px;">
-            <div style="background:#1e293b; padding:40px; border-radius:20px; border:2px solid #ef4444; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-                <h1 style="color:#ef4444; font-size:40px; margin-bottom:10px;">Access Denied!</h1>
-                <p style="font-size:18px; margin-bottom:25px;">This script is unauthorized for use on this domain.</p>
-                <p style="font-size:14px; color:#94a3b8;">Original Source:</p>
-                <a href="https://www.idcardscannerpro.com" style="background:#4f46e5; color:#fff; text-decoration:none; padding:12px 25px; border-radius:10px; font-weight:bold; display:inline-block; margin-top:10px;">Go to Official Website</a>
-            </div>
-        </div>`;
-
-        // স্ক্রিপ্টের বাকি সব কাজ বন্ধ করে দেবে
-        window.stop(); 
-        throw new Error("Script execution stopped: Domain unauthorized.");
-    }
-})();
-
-// ---------------------------------
 
 let epCropper = null;
 
