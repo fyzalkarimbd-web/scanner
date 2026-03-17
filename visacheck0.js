@@ -126,6 +126,7 @@
       { name: "Tonga", flag: "to", url: "https://www.tongaconsul.com/visa" },
       { name: "Vanuatu", flag: "vu", url: "https://visa.vfsglobal.com/vut/en/aus/track-application" },
       { name: "Solomon Islands", flag: "sb", url: "https://immigration.gov.sb/know-your-visa-requirements/" },
+      { name: "Laos", flag: "la", url: "https://laoevisa.gov.la/index" },
       { name: "Kenya", flag: "ke", url: "https://etakenya.go.ke/" }
 
   ];
