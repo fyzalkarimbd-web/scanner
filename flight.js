@@ -73,6 +73,7 @@ const flightData =[
       { name: "Croatia", flag: "hr", url: "https://wci.croatiaairlines.hr/web/ck_retrieve?langCode=en" }, // Croatia Airlines
       { name: "Finland", flag: "fi", url: "https://www.finnair.com/en/check-in" },
       { name: "Ireland", flag: "ie", url: "https://www.aerlingus.com/html/en-US/home.html" }, // Aer Lingus
+      { name: "Laos", flag: "la", url: "https://laoairlines.com/en/check-in-online/" }, // Laos
       { name: "Colombia", flag: "co", url: "https://checkinnew.avianca.com/Check-In?lang=En" } // Avianca
   ];
 
