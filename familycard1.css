@@ -148,6 +148,8 @@
   @media (max-width: 1024px) {
       .fc-grid-layout { grid-template-columns: 1fr; }
       .fc-input-side { padding-right: 0; }
+
+        .fc-main-box { padding: 2px;}
       
       .fc-a4-paper {
           transform: scale(0.6);
@@ -160,6 +162,8 @@
   @media (max-width: 768px) {
       .fc-field-grid { grid-template-columns: 1fr; gap: 10px; }
       .fc-preview-side { padding: 10px; }
+
+        .fc-main-box { padding: 2px;}
       
       .fc-a4-paper {
           transform: scale(0.45);
@@ -171,6 +175,9 @@
   }
 
   @media (max-width: 450px) {
+
+      .fc-main-box { padding: 2px;}
+        
       .fc-a4-paper {
           transform: scale(0.35);
           margin-bottom: -191.75mm; /* 295 * -0.65 */
