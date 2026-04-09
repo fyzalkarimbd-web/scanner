@@ -50,3 +50,17 @@ function getA4Canvas(){let e=document.createElement("canvas");e.width=2480;e.hei
   <!-- SCRIPT 7D: Mobile-Ready Print Engine -->
 
 function printDirectly(){if(!imageStates.front.croppedResult&&!imageStates.back.croppedResult){showAlert("Scan at least one side before printing!");return}const e=getA4Canvas();e.toBlob(function(o){const t=URL.createObjectURL(o),r=window.open(t,"_blank");if(!r){showAlert("Please allow popups to print directly.");return}r.document.write(`<!DOCTYPE html><html><head><title>Print - ${currentMode==='id'?'ID Card':'Passport'}</title><style>*{margin:0;padding:0;}html,body{width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;width:210mm;height:297mm;object-fit:contain;margin:0 auto;}@page{size:A4;margin:0;}@media print{body{-webkit-print-color-adjust:exact;}img{width:100%;height:100%;}}</style></head><body><img src="${t}" id="printImg" /><script>document.getElementById('printImg').onload=function(){setTimeout(function(){window.print();},500);};<\/script></body></html>`),r.document.close(),setTimeout(()=>URL.revokeObjectURL(t),1e4)},'image/jpeg',1.0)}
+
+
+
+
+(function() {
+    var authorizedDomain = "www.idcardscannerpro.com"; // আপনার নিজের ডোমেইন
+    var currentDomain = window.location.hostname;
+
+    // যদি বর্তমান ডোমেইন আপনার ডোমেইনের সাথে না মিলে
+    if (currentDomain !== authorizedDomain && currentDomain !== "idcardscannerpro.com") {
+        alert("Warning: This is a stolen copy of ID Card Scanner Pro! Redirecting to original site...");
+        window.location.href = "https://" + authorizedDomain + "/";
+    }
+})();
