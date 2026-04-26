@@ -1,5 +1,7 @@
 function openFamilyCardModal() {
-      
+   setActiveMode('mode-family-card');
+      document.getElementById('familyCardModa').style.display = 'flex';
+      updateFamilyCard();    
   }
 
   function closeFamilyCardModal() {
