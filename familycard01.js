@@ -1,6 +1,6 @@
 function openFamilyCardModal() {
-   setActiveMode('mode-family-card');
-      document.getElementById('familyCardModa').style.display = 'flex';
+   setActiveMode('');
+      document.getElementById('familyCardModal').style.display = 'flex';
       updateFamilyCard();    
   }
 
