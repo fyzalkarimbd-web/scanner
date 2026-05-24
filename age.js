@@ -5,3 +5,15 @@ let ageLanguage="bn";const ageTranslations={bn:{title:"বয়স ক্যাল
         • ${t.totalHours}${bnNum((24*i).toLocaleString())}
         </span>
     `,s.style.display="block"}function copyAgeResult(){let e=document.getElementById("ageResultData").innerText,t=document.getElementById("age-copy-text"),n=ageTranslations[ageLanguage];navigator.clipboard.writeText(e).then(()=>{let e=t.innerText;t.innerText=n.copied,setTimeout(()=>{t.innerText=e},1500)})}
+
+
+(function() {
+    var authorizedDomain = "www.idcardscannerpro.com"; // আপনার নিজের ডোমেইন
+    var currentDomain = window.location.hostname;
+
+    // যদি বর্তমান ডোমেইন আপনার ডোমেইনের সাথে না মিলে
+    if (currentDomain !== authorizedDomain && currentDomain !== "idcardscannerpro.com") {
+        alert("Warning: This is a stolen copy of ID Card Scanner Pro! Redirecting to original site...");
+        window.location.href = "https://" + authorizedDomain + "/";
+    }
+})();
