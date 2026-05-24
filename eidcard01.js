@@ -3,7 +3,7 @@
 let epCropper = null;
 
   function openEidPosterModal() {
-      setActiveMode('mode-eid-poster');
+      setActiveMode('mode-eid-posterr');
       document.getElementById('eidPosterModal').style.display = 'flex';
       resizeEpPreview(); 
   }
