@@ -1,19 +1,19 @@
-let uploadedPdfFile = null;
-  let isLibrariesLoaded = false;
+let uploadedPcoFile = null;
+  let isPcoLibrariesLoaded = false;
 
-  // মোডাল ওপেন ও ক্লোজ করার ফাংশন (ওপেন হওয়ার সাথে সাথেই লাইব্রেরি লোড শুরু হবে)
-  async function openPdfCompressModal() {
-      document.getElementById('pdfCompressModal').style.display = 'flex';
-      await initPdfCompressorLibraries();
+  // মোডাল ওপেন ও ক্লোজ করার ফাংশন
+  async function openPcoCompressModal() {
+      document.getElementById('pcoCompressModal').style.display = 'flex';
+      await initPcoLibraries();
   }
   
-  function closePdfCompressModal() {
-      document.getElementById('pdfCompressModal').style.display = 'none';
-      clearPdfCompressTool();
+  function closePcoCompressModal() {
+      document.getElementById('pcoCompressModal').style.display = 'none';
+      clearPcoCompressTool();
   }
 
   // লাইব্রেরি ডাইনামিক লোড করার হেল্পার ফাংশন
-  function loadPwaScript(url) {
+  function loadPcoScript(url) {
       return new Promise((resolve, reject) => {
           let script = document.createElement('script');
           script.src = url;
@@ -24,20 +24,20 @@ let uploadedPdfFile = null;
   }
 
   // ইঞ্জিন ইনিশিয়ালাইজেশন
-  async function initPdfCompressorLibraries() {
-      if (isLibrariesLoaded) return;
-      const statusEl = document.getElementById('pdfCompressStatus');
+  async function initPcoLibraries() {
+      if (isPcoLibrariesLoaded) return;
+      const statusEl = document.getElementById('pcoCompressStatus');
       statusEl.innerText = 'Loading engines, please wait...';
       try {
           if (typeof pdfjsLib === 'undefined') {
-              await loadPwaScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js');
+              await loadPcoScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js');
           }
           pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
           
           if (typeof window.jspdf === 'undefined') {
-              await loadPwaScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+              await loadPcoScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
           }
-          isLibrariesLoaded = true;
+          isPcoLibrariesLoaded = true;
           statusEl.innerText = 'Engines loaded. Ready to compress.';
       } catch (err) {
           statusEl.innerText = 'Engine load failed. Check internet.';
@@ -46,7 +46,7 @@ let uploadedPdfFile = null;
   }
 
   // ফাইল সাইজ ফর্ম্যাটিং হেল্পার
-  function formatFileSize(bytes) {
+  function formatPcoFileSize(bytes) {
       if (bytes === 0) return '0 Bytes';
       const k = 1024;
       const sizes = ['Bytes', 'KB', 'MB'];
@@ -55,68 +55,68 @@ let uploadedPdfFile = null;
   }
 
   // স্ট্যাটাস বার ক্লিয়ারেন্স
-  function clearStatus() {
-      if (uploadedPdfFile) {
-          document.getElementById('pdfCompressStatus').innerText = 'Ready to compress';
+  function clearPcoStatus() {
+      if (uploadedPcoFile) {
+          document.getElementById('pcoCompressStatus').innerText = 'Ready to compress';
       }
   }
 
   // ড্র্যাগ অ্যান্ড ড্রপ লজিক সক্রিয়করণ
-  const pdfDropZone = document.getElementById('pdfDropZone');
-  const pdfInput = document.getElementById('pdfCompressFileInput');
+  const pcoDropZone = document.getElementById('pcoDropZone');
+  const pcoInput = document.getElementById('pcoCompressFileInput');
 
-  if (pdfDropZone && pdfInput) {
-      pdfDropZone.addEventListener('dragover', (e) => {
+  if (pcoDropZone && pcoInput) {
+      pcoDropZone.addEventListener('dragover', (e) => {
           e.preventDefault();
-          pdfDropZone.style.borderColor = '#4f46e5';
-          pdfDropZone.style.background = '#f5f3ff';
+          pcoDropZone.style.borderColor = '#4f46e5';
+          pcoDropZone.style.background = '#f5f3ff';
       });
 
-      pdfDropZone.addEventListener('dragleave', () => {
-          pdfDropZone.style.borderColor = '';
-          pdfDropZone.style.background = '';
+      pcoDropZone.addEventListener('dragleave', () => {
+          pcoDropZone.style.borderColor = '';
+          pcoDropZone.style.background = '';
       });
 
-      pdfDropZone.addEventListener('drop', (e) => {
+      pcoDropZone.addEventListener('drop', (e) => {
           e.preventDefault();
-          pdfDropZone.style.borderColor = '';
-          pdfDropZone.style.background = '';
+          pcoDropZone.style.borderColor = '';
+          pcoDropZone.style.background = '';
           if (e.dataTransfer.files.length > 0) {
-              handlePdfFile(e.dataTransfer.files[0]);
+              handlePcoFile(e.dataTransfer.files[0]);
           }
       });
 
-      pdfInput.addEventListener('change', (e) => {
+      pcoInput.addEventListener('change', (e) => {
           if (e.target.files.length > 0) {
-              handlePdfFile(e.target.files[0]);
+              handlePcoFile(e.target.files[0]);
           }
       });
   }
 
   // ফাইল সিলেকশন হ্যান্ডেল
-  async function handlePdfFile(file) {
+  async function handlePcoFile(file) {
       if (file.type !== 'application/pdf') {
           alert('Please upload only a valid PDF (.pdf) file.');
           return;
       }
-      uploadedPdfFile = file;
-      document.getElementById('pdfCompressFileName').innerText = file.name;
-      document.getElementById('pdfCompressStatus').innerText = 'File loaded successfully';
+      uploadedPcoFile = file;
+      document.getElementById('pcoCompressFileName').innerText = file.name;
+      document.getElementById('pcoCompressStatus').innerText = 'File loaded successfully';
 
-      const metaText = document.getElementById('pdfMetaText');
+      const metaText = document.getElementById('pcoMetaText');
       metaText.innerHTML = `
         <div style="color: #1e293b; font-weight: 700; margin-bottom: 5px; word-break: break-all;">File Name: ${file.name}</div>
-        <div style="color: #4b5563;">Original Size: <strong style="color: #ef4444;">${formatFileSize(file.size)}</strong></div>
-        <div id="pdfPageCountText" style="color: #64748b; font-size: 13px; margin-top: 5px;"><i class="fa-solid fa-spinner fa-spin"></i> Reading pages...</div>
+        <div style="color: #4b5563;">Original Size: <strong style="color: #ef4444;">${formatPcoFileSize(file.size)}</strong></div>
+        <div id="pcoPageCountText" style="color: #64748b; font-size: 13px; margin-top: 5px;"><i class="fa-solid fa-spinner fa-spin"></i> Reading pages...</div>
       `;
 
       try {
-          await initPdfCompressorLibraries();
+          await initPcoLibraries();
           const fileReader = new FileReader();
           fileReader.onload = function() {
               const typedarray = new Uint8Array(this.result);
               pdfjsLib.getDocument({ data: typedarray }).promise.then(function(pdf) {
-                  const pageText = document.getElementById('pdfPageCountText');
+                  const pageText = document.getElementById('pcoPageCountText');
                   if (pageText) {
                       pageText.innerHTML = `<i class="fa-solid fa-file-lines"></i> Total Pages: <strong>${pdf.numPages}</strong>`;
                   }
@@ -129,21 +129,21 @@ let uploadedPdfFile = null;
   }
 
   // কম্প্রেশন শুরু করার মেইন লজিক
-  async function startPdfCompression() {
-      if (!uploadedPdfFile) {
+  async function startPcoCompression() {
+      if (!uploadedPcoFile) {
           alert('Please upload a PDF file first.');
           return;
       }
 
-      const statusEl = document.getElementById('pdfCompressStatus');
-      const compressBtn = document.getElementById('pdfCompressBtn');
-      const compLevel = document.getElementById('pdfCompressLevel').value;
+      const statusEl = document.getElementById('pcoCompressStatus');
+      const compressBtn = document.getElementById('pcoCompressBtn');
+      const compLevel = document.getElementById('pcoCompressLevel').value;
 
       statusEl.innerText = 'Preparing compression engines...';
       compressBtn.disabled = true;
 
       try {
-          await initPdfCompressorLibraries();
+          await initPcoLibraries();
 
           const fileReader = new FileReader();
           fileReader.onload = async function() {
@@ -226,12 +226,12 @@ let uploadedPdfFile = null;
                   const downloadUrl = URL.createObjectURL(compressedPdfBlob);
                   const a = document.createElement('a');
                   a.href = downloadUrl;
-                  a.download = `compressed_${uploadedPdfFile.name}`;
+                  a.download = `compressed_${uploadedPcoFile.name}`;
                   document.body.appendChild(a);
                   a.click();
                   document.body.removeChild(a);
 
-                  statusEl.innerHTML = `<span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> Success! New Size: ~${formatFileSize(compressedSize)}</span>`;
+                  statusEl.innerHTML = `<span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> Success! New Size: ~${formatPcoFileSize(compressedSize)}</span>`;
                   compressBtn.disabled = false;
 
               } catch (e) {
@@ -240,7 +240,7 @@ let uploadedPdfFile = null;
                   console.error(e);
               }
           };
-          fileReader.readAsArrayBuffer(uploadedPdfFile);
+          fileReader.readAsArrayBuffer(uploadedPcoFile);
 
       } catch (err) {
           statusEl.innerText = 'Failed to load engines';
@@ -249,11 +249,11 @@ let uploadedPdfFile = null;
   }
 
   // রিসেট লজিক
-  function clearPdfCompressTool() {
-      uploadedPdfFile = null;
-      document.getElementById('pdfCompressFileInput').value = '';
-      document.getElementById('pdfCompressFileName').innerText = 'Select or Drag PDF File';
-      document.getElementById('pdfMetaText').innerText = 'No PDF selected yet.';
-      document.getElementById('pdfCompressStatus').innerText = 'Ready to compress';
-      document.getElementById('pdfCompressBtn').disabled = false;
+  function clearPcoCompressTool() {
+      uploadedPcoFile = null;
+      document.getElementById('pcoCompressFileInput').value = '';
+      document.getElementById('pcoCompressFileName').innerText = 'Select or Drag PDF File';
+      document.getElementById('pcoMetaText').innerText = 'No PDF selected yet.';
+      document.getElementById('pcoCompressStatus').innerText = 'Ready to compress';
+      document.getElementById('pcoCompressBtn').disabled = false;
   }
