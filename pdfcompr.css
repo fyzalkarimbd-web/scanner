@@ -1,5 +1,5 @@
-/* PDF Compressor Modal Styles */
-  .crop-modal-overlay {
+/* PDF Compressor Modal Styles (Scoped to pco-) */
+  .pco-modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(15, 23, 42, 0.65);
@@ -14,29 +14,29 @@
   }
   
   /* Inline style override to trigger opacity transition smoothly */
-  .crop-modal-overlay[style*=&quot;display: flex&quot;],
-  .crop-modal-overlay[style*=&quot;display:flex&quot;] {
+  .pco-modal-overlay[style*="display: flex"],
+  .pco-modal-overlay[style*="display:flex"] {
       opacity: 1 !important;
   }
 
-  .crop-modal-content {
+  .pco-modal-content {
       background: #ffffff;
       width: 90%;
       max-width: 480px;
       border-radius: 24px;
       position: relative;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      animation: cpModalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: pcoModalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       box-sizing: border-box;
       border-top: 6px solid #4f46e5;
   }
 
-  @keyframes cpModalPop {
+  @keyframes pcoModalPop {
       0% { transform: scale(0.85) translateY(20px); opacity: 0; }
       100% { transform: scale(1) translateY(0); opacity: 1; }
   }
 
-  .close-crop-modal {
+  .pco-close-modal {
       position: absolute;
       top: 15px; right: 20px;
       font-size: 28px;
@@ -46,23 +46,23 @@
       transition: 0.2s;
       z-index: 10;
   }
-  .close-crop-modal:hover {
+  .pco-close-modal:hover {
       color: #ef4444;
       transform: scale(1.15);
   }
 
-  .cp-box {
+  .pco-cp-box {
       box-sizing: border-box;
   }
 
-  .ip-container {
+  .pco-ip-container {
       display: flex;
       flex-direction: column;
       text-align: center;
   }
 
   /* Upload Area Styles */
-  .cp-upload-area {
+  .pco-upload-area {
       border: 2px dashed #cbd5e1;
       border-radius: 16px;
       padding: 30px 20px;
@@ -72,26 +72,26 @@
       margin-bottom: 20px;
       box-sizing: border-box;
   }
-  .cp-upload-area:hover {
+  .pco-upload-area:hover {
       border-color: #4f46e5;
       background: #f5f3ff;
       transform: translateY(-2px);
   }
 
   /* Settings Dropdown Styles */
-  .ip-settings {
+  .pco-settings {
       margin-bottom: 20px;
       text-align: left;
       width: 100%;
   }
-  .ip-setting-item label {
+  .pco-setting-item label {
       display: block;
       font-size: 13px;
       font-weight: 700;
       color: #334155;
       margin-bottom: 8px;
   }
-  .ip-setting-item select {
+  .pco-setting-item select {
       width: 100%;
       padding: 12px 15px;
       border: 2px solid #e2e8f0;
@@ -102,13 +102,13 @@
       transition: 0.3s;
       font-family: inherit;
   }
-  .ip-setting-item select:focus {
+  .pco-setting-item select:focus {
       border-color: #4f46e5;
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
   }
 
   /* Status Text */
-  .ip-status {
+  .pco-status {
       font-size: 14px;
       font-weight: 700;
       color: #4f46e5;
@@ -116,7 +116,7 @@
   }
 
   /* Action Buttons Styles */
-  .conv-btn-main {
+  .pco-btn-main {
       width: 100%;
       padding: 14px 20px;
       border: none;
@@ -133,48 +133,48 @@
       box-sizing: border-box;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   }
-  .conv-btn-main:hover {
+  .pco-btn-main:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 15px rgba(0,0,0,0.15);
   }
 
   /* ==================== MOBILE RESPONSIVE CSS ==================== */
   @media (max-width: 600px) {
-      .crop-modal-content {
+      .pco-modal-content {
           width: 94%;
           border-radius: 20px;
       }
-      .cp-box {
+      .pco-cp-box {
           padding: 25px 15px !important;
       }
-      .cp-upload-area {
+      .pco-upload-area {
           padding: 20px 15px;
       }
-      .close-crop-modal {
+      .pco-close-modal {
           top: 10px;
           right: 15px;
           font-size: 24px;
       }
-      .ip-container h2 {
+      .pco-ip-container h2 {
           font-size: 20px !important;
       }
-      .ip-container .sub {
+      .pco-ip-container .sub {
           font-size: 13px !important;
           margin-bottom: 15px !important;
       }
-      .ip-setting-item select {
+      .pco-setting-item select {
           padding: 10px;
           font-size: 14px;
           border-radius: 10px;
       }
-      #pdfMetaBox {
+      #pcoMetaBox {
           min-height: 80px !important;
       }
-      #pdfMetaText {
+      #pcoMetaText {
           font-size: 13px !important;
           padding: 15px !important;
       }
-      .conv-btn-main {
+      .pco-btn-main {
           padding: 12px;
           font-size: 14px;
           border-radius: 10px;
