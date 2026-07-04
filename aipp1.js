@@ -101,7 +101,7 @@ window.processAiPassport = function(type) {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    window.open("https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image", "_blank");
+    window.open("https://aistudio.google.com/prompts/new_chat?model=gemini-3.1-flash-lite-image", "_blank");
 };
 
 window.showAiDemo = function(num) {
