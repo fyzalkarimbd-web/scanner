@@ -1,5 +1,5 @@
 <!--Progressive HLS Streaming Engine & Playlist Parser-->
-<script type="text/javascript">
+<script type='text/javascript'>
   //<![CDATA[
   
   let parsedChannels = [];
@@ -23,6 +23,13 @@
               // Hls.js ইঞ্জিন লোড করবে
               await loadIptvEngineScript('https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js');
           }
+          
+          // টিভি সাউন্ড ভলিউম ৫০% সেট করার লজিক (NEW UPDATE)
+          const video = document.getElementById('iptvVideoPlayer');
+          if (video) {
+              video.volume = 0.5; // ৫০% ডিফল্ট ভলিউম সেট করবে (0.0 থেকে 1.0 এর মধ্যে 0.5 মানে 50%)
+          }
+
           // মেইন ডিফল্ট সার্ভার (Server 1) দিয়ে শুরু করবে
           const defaultServer = document.getElementById('dirServerSelect').value;
           fetchAndParseM3uPlaylist(defaultServer);
@@ -146,7 +153,8 @@
       const renderLimit = 300;
       const itemsToRender = channelList.slice(0, renderLimit);
 
-      itemsToRender.forEach((chan, idx) => {
+      for (let i = 0; i < itemsToRender.length; i++) {
+          const chan = itemsToRender[i];
           const btn = document.createElement('button');
           btn.className = 'channel-btn';
           btn.onclick = function() {
@@ -167,7 +175,7 @@
             <span class="channel-name" title="${chan.name}">${chan.name}</span>
           `;
           grid.appendChild(btn);
-      });
+      }
 
       // ৩০০ এর বেশি চ্যানেল থাকলে কাস্টমারকে সার্চ বার ব্যবহারের নির্দেশনা দেবে
       if (channelList.length > renderLimit) {
@@ -207,16 +215,28 @@
               capLevelToPlayerSize: true, // মোবাইলের ছোট স্ক্রিনে ডাটা বাঁচাতে স্বয়ংক্রিয় রেজোলিউশন কমাবে
               maxBufferLength: 15,       // বাফারিং এড়াতে এবং অতিরিক্ত এমবি অপচয় রোধ করতে ১৫ সেকেন্ড প্রি-লোড রাখবে
               maxMaxBufferLength: 30,    // সর্বোচ্চ ৩০ সেকেন্ডের সেফটি বাফার
-              enableWorker: true,        // লো-কনফিগ ফোনে যাতে ল্যাগিং না করে সেজন্য আলাদা থ্রেড ব্যবহার করবে
+              enableWorker: true,        // লো-কনфিগ ফোনে যাতে ল্যাগিং না করে সেজন্য আলাদা থ্রেড ব্যবহার করবে
               progressive: true
           };
 
           hlsInstance = new Hls(hlsConfig);
           hlsInstance.loadSource(streamUrl);
           hlsInstance.attachMedia(video);
+          
           hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-              video.play().catch(e => console.log("Autoplay blocked by browser policy"));
+              // ভলিউম ৫০% নিশ্চিত করে অটো-প্লে করার চেষ্টা (অ্যালার্ট এড়িয়ে অটো-প্লে সচল করতে ট্রাই-ক্যাচ) [1]
+              video.volume = 0.5;
+              video.muted = false;
+              
+              video.play().then(() => {
+                  console.log("Autoplay started unmuted at 50% volume successfully.");
+              }).catch(e => {
+                  console.log("Unmuted autoplay blocked, falling back to muted autoplay...");
+                  video.muted = true; // ব্লক এড়াতে মিউট করে প্লে চালু রাখবে [1]
+                  video.play().catch(err => console.log("Direct playback blocked completely", err));
+              });
           });
+
           hlsInstance.on(Hls.Events.ERROR, function(event, data) {
               if (data.fatal) {
                   switch (data.type) {
@@ -238,7 +258,15 @@
           // নেটিভ সাফারি (iOS/Safari) সাপোর্ট
           video.src = streamUrl;
           video.addEventListener('loadedmetadata', function() {
-              video.play().catch(e => console.log("Autoplay blocked"));
+              video.volume = 0.5;
+              video.muted = false;
+              video.play().then(() => {
+                  console.log("Safari unmuted autoplay success");
+              }).catch(e => {
+                  console.log("Safari unmuted blocked, trying muted...");
+                  video.muted = true;
+                  video.play().catch(err => console.log("Safari play blocked completely", err));
+              });
           });
       } else {
           alert('This browser does not support HLS streaming. Please use Chrome, Edge, or Safari.');
@@ -291,3 +319,4 @@
 
   //]]>
 </script>
+<!--ALA Soft - Live IPTV Player END-->
