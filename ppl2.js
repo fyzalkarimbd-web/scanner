@@ -1,4 +1,4 @@
-// গ্লোবাল ডাটা অবজেক্ট (window.psData দিয়ে সুরক্ষিত করা হলো)
+// গ্লোবাল ডাটা অবজেক্ট
 window.psData = [
     { img: null, count: 0, size: 'pp' },
     { img: null, count: 0, size: 'pp' },
@@ -10,26 +10,24 @@ window.psData = [
 // মোডাল ওপেন ও ক্লোজ
 function openPhotoSheetModal() {
     document.getElementById('photoSheetModal').style.display = 'block';
-    updatePsPreview();
+    setTimeout(updatePsPreview, 100); // প্রিভিউ বক্স লোড হওয়ার জন্য সাময়িক ডিলে
 }
 
 function closePhotoSheetModal() {
     document.getElementById('photoSheetModal').style.display = 'none';
 }
 
-// ছবি আপলোড লজিক
+// ছবি আপলোড করার ফাংশন
 function loadPsImage(event, index) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            // ডাটা সেভ করা
             window.psData[index].img = e.target.result;
             if (window.psData[index].count === 0) {
-                window.psData[index].count = 1; // আপলোড করলেই ডিফল্ট ১টি ছবি সেট হবে
+                window.psData[index].count = 1; // আপলোড করলেই ডিফল্ট ১টি হবে
             }
 
-            // UI আপডেট করা
             const prevImg = document.getElementById(`prev${index + 1}`);
             const plusIcon = document.getElementById(`plus${index + 1}`);
             const countInput = document.getElementById(`count${index}`);
@@ -41,14 +39,13 @@ function loadPsImage(event, index) {
             if (plusIcon) plusIcon.style.display = 'none';
             if (countInput) countInput.value = window.psData[index].count;
 
-            // লাইভ প্রিভিউ আপডেট
             updatePsPreview();
         };
         reader.readAsDataURL(file);
     }
 }
 
-// ছবি ডিলিট বা রিমুভ করা
+// ছবি রিমুভ করার ফাংশন
 function removePsImage(index) {
     window.psData[index].img = null;
     window.psData[index].count = 0;
@@ -69,11 +66,9 @@ function removePsImage(index) {
     updatePsPreview();
 }
 
-// প্লাস (+) এবং মাইনাস (-) বাটন লজিক (সমস্যা সমাধানকৃত)
+// প্লাস (+) ও মাইনাস (-) ক্লিক ফাংশন
 function changePsCount(index, val) {
     const prevImg = document.getElementById(`prev${index + 1}`);
-    
-    // ডাবল-চেক: window.psData তে ছবি আছে নাকি HTML প্রিভিউতে ছবি লোড হয়েছে
     const hasImage = (window.psData[index] && window.psData[index].img) || 
                      (prevImg && prevImg.src && prevImg.src.startsWith('data:image'));
 
@@ -82,7 +77,6 @@ function changePsCount(index, val) {
         return;
     }
 
-    // ব্যাকআপ সিঙ্ক: যদি HTML-এ ছবি থাকে কিন্তু ডাটাতে মিস হয়
     if (hasImage && !window.psData[index].img && prevImg) {
         window.psData[index].img = prevImg.src;
     }
@@ -96,7 +90,7 @@ function changePsCount(index, val) {
     updatePsPreview(index, val);
 }
 
-// ছবির সাইজ পরিবর্তন করা
+// সাইজ চেঞ্জ ফাংশন
 function changePsSize(index, newSize) {
     if (window.psData[index]) {
         window.psData[index].size = newSize;
@@ -104,7 +98,7 @@ function changePsSize(index, newSize) {
     }
 }
 
-// A4 লাইভ প্রিভিউ আপডেট লজিক
+// A4 লাইভ প্রিভিউ রেন্ডার করার ফাংশন (ফিক্সড)
 function updatePsPreview(lastIndexChanged = null, delta = 0) {
     const previewBox = document.getElementById('a4-preview-area');
     const borderCheckbox = document.getElementById('psBorder');
@@ -115,11 +109,11 @@ function updatePsPreview(lastIndexChanged = null, delta = 0) {
     const showBorder = borderCheckbox ? borderCheckbox.checked : true;
     previewBox.innerHTML = '';
 
-    // ছবির সাইজ রেশিও
+    // সাইজ সেটিংস (উইথ এবং অ্যাসপেক্ট রেশিও)
     const sizes = {
-        pp: { width: '18%', aspectRatio: '40 / 50' },  // Passport Size
-        st: { width: '10.5%', aspectRatio: '20 / 25' }, // Stamp Size
-        jp: { width: '23%', aspectRatio: '55 / 40' }   // Joint Photo Size
+        pp: { width: '18%', ratio: '4 / 5' },    // Passport Size
+        st: { width: '10.8%', ratio: '4 / 5' },  // Stamp Size
+        jp: { width: '23%', ratio: '5 / 4' }     // Joint Photo Size
     };
 
     window.psData.forEach((person) => {
@@ -127,11 +121,12 @@ function updatePsPreview(lastIndexChanged = null, delta = 0) {
             for (let i = 0; i < person.count; i++) {
                 const item = document.createElement('div');
                 item.style.width = sizes[person.size].width;
-                item.style.aspectRatio = sizes[person.size].aspectRatio;
+                item.style.aspectRatio = sizes[person.size].ratio;
+                item.style.flexShrink = '0'; // সাইজ কমে যাওয়া বন্ধ করবে
                 item.style.boxSizing = 'border-box';
                 item.style.border = showBorder ? '1px solid #000' : 'none';
                 item.style.overflow = 'hidden';
-                item.style.background = '#f8fafc';
+                item.style.background = '#fff';
 
                 const img = document.createElement('img');
                 img.src = person.img;
@@ -146,21 +141,28 @@ function updatePsPreview(lastIndexChanged = null, delta = 0) {
         }
     });
 
-    // A4 পেজ লিমিট ওভারফ্লো চেক
-    if (previewBox.scrollHeight > previewBox.clientHeight + 5) {
+    // সঠিক A4 পেজ লিমিট চেক (Height Collapse Bug Fix)
+    const containerHeight = previewBox.clientHeight;
+    
+    // প্রিভিউ বক্সের হাইট ১০০ পিক্সেলের বেশি থাকলে কেবল লিমিট চেক কাজ করবে
+    if (containerHeight > 100 && previewBox.scrollHeight > containerHeight + 3) {
         if (warning) warning.style.display = 'inline';
+        
+        // শুধু প্লাস বাটন চেপে ফুল হয়ে গেলে ১টি ছবি কমাবে
         if (lastIndexChanged !== null && delta > 0) {
             triggerAlert("A4 পেজের জায়গা শেষ! নতুন ছবি যোগ করলে তা পেজের বাইরে চলে যাবে।");
-            window.psData[lastIndexChanged].count -= 1;
+            window.psData[lastIndexChanged].count = Math.max(0, window.psData[lastIndexChanged].count - 1);
             document.getElementById(`count${lastIndexChanged}`).value = window.psData[lastIndexChanged].count;
-            updatePsPreview(); // রোলব্যাক রেন্ডার
+            
+            // রোলব্যাক রি-রেন্ডার
+            updatePsPreview(); 
         }
     } else {
         if (warning) warning.style.display = 'none';
     }
 }
 
-// ডিরেক্ট ప్రిન્ટ ফাংশন (A4 সাইজ)
+// ডিরেক্ট প্রিন্ট ফাংশন
 function directPrintSheet() {
     let hasPhotos = window.psData.some(p => p.img && p.count > 0);
     if (!hasPhotos) {
