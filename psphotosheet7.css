@@ -1,4 +1,4 @@
-/* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
+ /* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
   #grid-page-unit {
     width: 210mm;
     height: 297mm; 
@@ -81,6 +81,31 @@
   .print-instruction-box ul { margin: 0; padding-left: 20px; }
   .print-instruction-box li { font-size: 13px; margin-bottom: 5px; font-weight: 500; }
 
+  /* ১০টি রো এর জন্য স্ক্রোল কন্টেইনার সেটিংস (NEW UPDATE) */
+  #psInputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 380px; /* ডেক্সটপে পারফেক্ট স্ক্রোল হাইট */
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #f1f5f9;
+  }
+  /* ওয়েবকিট ব্রাউজার স্ক্রোলবার */
+  #psInputContainer::-webkit-scrollbar {
+    width: 5px;
+  }
+  #psInputContainer::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+  #psInputContainer::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 10px;
+  }
+
   /* --- প্রফেশনাল মোবাইল ফ্রেন্ডলি সিএসএস (১০০% পারফেক্ট ভিউ) --- */
   @media (max-width: 850px) {
     #grid-scroll-wrapper { 
@@ -151,6 +176,9 @@
         border-radius: 12px;
         font-size: 11px;
     }
+    #psInputContainer {
+        max-height: 340px; /* মোবাইলে স্ক্রোল সাইজ কিছুটা ছোট হবে */
+    }
   }
 
   @media (max-width: 390px) {
@@ -163,7 +191,7 @@
   /* --- প্রিন্ট সেটিংস (A4 ফিজিক্যাল সাইজ নিশ্চিত করবে) --- */
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+    body { margin: 0; padding: 0; background: #fff; }
     
     #grid-page-unit { 
         transform: none !important; 
