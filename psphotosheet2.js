@@ -2,10 +2,10 @@
   let psImages = [null, null, null, null, null];
 
   function openPhotoSheetModal() {
-    if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
-    document.getElementById('photoSheetModal').style.display = 'flex';
-}
-
+      document.getElementById('photoSheetModal').style.display = 'flex';
+      if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
+      updatePsPreview();
+  }
 
   function closePhotoSheetModal() {
       document.getElementById('photoSheetModal').style.display = 'none';
@@ -24,7 +24,7 @@
               document.getElementById(`prev${index+1}`).style.display = 'block';
               document.getElementById(`plus${index+1}`).style.display = 'none';
               
-              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
+              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে (NEW UPDATE)
               const delBtn = document.getElementById(`delBtn${index+1}`);
               if (delBtn) delBtn.style.display = 'flex';
               
@@ -49,7 +49,7 @@
       document.getElementById(`plus${index+1}`).style.display = 'block';
       document.getElementById(`count${index+1}`).value = 0;
       
-      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে
+      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে (NEW UPDATE)
       const delBtn = document.getElementById(`delBtn${index+1}`);
       if (delBtn) delBtn.style.display = 'none';
       
@@ -81,7 +81,7 @@
       }
   }
 
-  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার ও স্ট্রেচিং অপ্টিমাইজেশন সহ)
+  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার অপ্টিমাইজেশন সহ)
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
       const limitWarning = document.getElementById('limitWarning');
@@ -96,7 +96,7 @@
       let hasAnyPhoto = false;
       const showBorder = document.getElementById('psBorder').checked;
       
-      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স)
+      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স) [1.1.2]
       const borderStyle = showBorder ? '1px solid #000000' : 'none';
 
       // ৫টি রোর প্রতিটি ইমেজ প্রসেস করবে
@@ -143,7 +143,7 @@
       }
 
       if (!hasAnyPhoto) {
-          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Photos Sheet Preview</div>`;
+          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Upload photos to see the A4 sheet preview</div>`;
       }
       return true;
   }
@@ -178,7 +178,7 @@
       });
   }
 
-  // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট (১০০% নিখুঁত স্টুডিও সাইজ প্রিন্ট আউটপুট - প্রিন্ট কপিতেও স্ট্রেচিং বন্ধ করা হয়েছে)
+  // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট (১০০% নিখুঁত স্টুডিও সাইজ প্রিন্ট আউটপুট)
   function directPrintSheet() {
       const activeCount = psImages.filter(img => img !== null).length;
       if (activeCount === 0) {
@@ -206,9 +206,8 @@
               }
 
               for (let j = 0; j < count; j++) {
-                  // align-self: flex-start !important; যুক্ত করা হয়েছে প্রিন্টিং কপিতেও স্ট্রেচিং বন্ধ করতে
                   itemsHTML += `
-                      <div class="print-photo-item" style="width: ${widthMm}mm; height: ${heightMm}mm; ${borderCss} box-sizing: border-box; overflow: hidden; display: inline-block; margin: 1.5mm; align-self: flex-start !important;">
+                      <div class="print-photo-item" style="width: ${widthMm}mm; height: ${heightMm}mm; ${borderCss} box-sizing: border-box; overflow: hidden; display: inline-block; margin: 1.5mm;">
                           <img src="${psImages[i]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
                       </div>
                   `;
@@ -218,7 +217,6 @@
 
       // নতুন প্রিন্ট ফ্রেন্ডলি উইন্ডো জেনারেট করবে
       const printWin = window.open('', '_blank');
-      // align-items: flex-start !important; যুক্ত করা হয়েছে প্রিন্টিং এ৪ ফ্রেমেও স্ট্রেচিং বন্ধ করতে
       printWin.document.write(`
           <html>
               <head>
@@ -232,7 +230,6 @@
                           flex-wrap: wrap;
                           gap: 1mm;
                           align-content: flex-start;
-                          align-items: flex-start !important;
                       }
                       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                   </style>
