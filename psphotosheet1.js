@@ -2,10 +2,10 @@
   let psImages = [null, null, null, null, null];
 
   function openPhotoSheetModal() {
-      document.getElementById('photoSheetModal').style.display = 'flex';
-      if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
-      updatePsPreview();
-  }
+    if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
+    document.getElementById('photoSheetModal').style.display = 'flex';
+}
+
 
   function closePhotoSheetModal() {
       document.getElementById('photoSheetModal').style.display = 'none';
@@ -143,7 +143,7 @@
       }
 
       if (!hasAnyPhoto) {
-          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Upload photos to see the A4 sheet preview</div>`;
+          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Photos Sheet Preview</div>`;
       }
       return true;
   }
