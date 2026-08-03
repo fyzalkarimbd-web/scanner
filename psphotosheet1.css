@@ -1,3 +1,4 @@
+<!-- A4 Photo Sheet Modal START -->
   /* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
   #grid-page-unit {
     width: 210mm;
@@ -13,7 +14,7 @@
     clear: both;
   }
 
-  /* ছবির বর্ডার এবং ডিজাইন (align-self যুক্ত করা হয়েছে যাতে স্ট্যাম্প ছবি পাসপোর্ট ছবির সাথে লম্বা হয়ে না যায়) */
+  /* ছবির বর্ডার এবং ডিজাইন */
   .grid-photo-item {
     background: #f8fafc;
     box-sizing: border-box;
