@@ -65,7 +65,7 @@
       updatePsPreview();
   }
 
-  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত শতভাগ নিরাপদ ফিক্স)
+  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত বাগ-ফিক্স)
   function adjustPhotoCount(index, val) {
       if (!psImages[index]) {
           alert("Please upload a photo for this row first!");
@@ -79,10 +79,10 @@
       
       countInput.value = target;
       
-      // রেন্ডার করবে এবং ওভারফ্লো লিমিট চেক করবে
+      // প্রিভিউ জেনারেট করবে এবং লিমিট রিচড স্ট্যাটাস চেক করবে
       const isOk = updatePsPreview();
       
-      // যদি পেপারের লিমিট রিচ করে (isOk === false), তবে ভ্যালু আগের অবস্থায় ফিরিয়ে নেবে (সংশোধিত)
+      // যদি পেপারের বাউন্ডারি ক্রস করে (isOk === false), তবে আগের ভ্যালু ফিরিয়ে আনবে
       if (isOk === false) {
           countInput.value = current;
           updatePsPreview();
@@ -142,105 +142,84 @@
       return { coords, limitReached };
   }
 
-  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার ও ফ্লেক্স স্ট্রেচিং বাগ-ফিক্স সহ)
+  // লাইভ এ৪ প্রিভিউ জেনারেটর (১ পিক্সেলের চেয়েও চিকন ০.৫ পিক্সেল বর্ডার সহ) [1.1.2]
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
-      const limitWarning = document.getElementById('limitWarning');
-      const footerNote = document.getElementById('footerNote');
+      const result = getDynamicCoords();
+      const coords = result.coords;
       
-      if (!previewArea) return true;
-      
+      document.getElementById('limitWarning').style.display = result.limitReached ? 'block' : 'none';
+      document.getElementById('footerNote').style.display = result.limitReached ? 'block' : 'none';
+
       previewArea.innerHTML = ''; // ক্লিয়ার করবে
-      limitWarning.style.display = 'none';
-      footerNote.style.display = 'none';
-
-      let hasAnyPhoto = false;
-      const showBorder = document.getElementById('psBorder').checked;
       
-      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স)
-      const borderStyle = showBorder ? '1px solid #000000' : 'none';
-
-      // ১০টি রোর প্রতিটি ইমেজ প্রসেস করবে
-      for (let i = 0; i < 10; i++) {
-          if (psImages[i]) {
-              hasAnyPhoto = true;
-              const count = parseInt(document.getElementById(`count${i+1}`).value) || 0;
-              const size = document.getElementById(`size${i+1}`).value;
-              
-              // ওমানি/বাংলাদেশি স্ট্যান্ডার্ড মিলিমিটার ডাইমেনশনকে ডাইনামিক পার্সেন্টেজে রূপান্তর
-              let widthPercent = "18.5%"; // পাসপোর্ট (৫ কপি এক লাইনে ধরবে)
-              let aspectRatio = "40 / 50";
-              
-              if (size === 'stamp') {
-                  widthPercent = "9.25%"; // স্ট্যাম্প (১০ কপি এক লাইনে ধরবে)
-                  aspectRatio = "20 / 25";
-              } else if (size === 'joint') {
-                  widthPercent = "27.75%"; // জয়েন্ট (৩ কপি এক লাইনে ধরবে)
-                  aspectRatio = "60 / 50";
-              }
-
-              for (let j = 0; j < count; j++) {
-                  const item = document.createElement('div');
-                  item.className = 'grid-photo-item';
-                  item.style.width = widthPercent;
-                  item.style.aspectRatio = aspectRatio;
-                  // বর্ডার সেটিংস সরাসরি এবং শতভাগ সিকিউরড করার জন্য setProperty ব্যবহার করা হয়েছে
-                  item.style.setProperty('border', borderStyle, 'important'); 
-                  item.style.setProperty('border-radius', '0px', 'important'); // কোণা গোল হওয়া সম্পূর্ণ বন্ধ
-                  item.innerHTML = `<img src="${psImages[i]}" style="width:100%; height:100%; object-fit:cover;" />`;
-                  previewArea.appendChild(item);
-
-                  // ওভারফ্লো বা পেপার লিমিট চেকার
-                  const containerHeight = previewArea.clientHeight;
-                  const totalScrollHeight = previewArea.scrollHeight;
-
-                  if (totalScrollHeight > containerHeight + 5) {
-                      previewArea.removeChild(item);
-                      limitWarning.style.display = 'inline';
-                      footerNote.style.display = 'block';
-                      return false; // লিমিট শেষ হলে আর আইটেম এড হতে দেবে না
-                  }
-              }
-          }
-      }
-
-      if (!hasAnyPhoto) {
-          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Upload photos to see the A4 sheet preview</div>`;
+      if(coords.length === 0) {
+          previewArea.innerHTML = '<p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #94a3b8; font-size: 12px; font-weight: 700;">No Image Selected</p>';
           return true; // মডাল ক্লিয়ার থাকলে ট্রু রিটার্ন করবে
       }
+
+      // এ৪ প্রিভিউ এরিয়ার উইডথ অনুযায়ী স্কেল রেশিও নির্ধারণ
+      const scale = previewArea.clientWidth / 210; 
+      const showBorder = document.getElementById('psBorder').checked;
       
-      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স) [1.1.2]
+      // ছবির চারপাশের বর্ডারটি স্ক্রিনে একদম চিকন দেখতে ০.৫ পিক্সেল সেট করা হয়েছে [1.1.2]
+      const borderStyle = showBorder ? '0.5px solid #000000' : 'none';
+
+      coords.forEach(p => {
+          const div = document.createElement('div');
+          div.style.position = 'absolute';
+          div.style.width = (p.w * scale) + 'px';
+          div.style.height = (p.h * scale) + 'px';
+          div.style.left = (p.x * scale) + 'px';
+          div.style.top = (p.y * scale) + 'px';
+          div.style.backgroundImage = "url(" + p.img + ")";
+          div.style.backgroundSize = 'cover';
+          div.style.backgroundPosition = 'center';
+          div.style.setProperty('border', borderStyle, 'important'); 
+          div.style.setProperty('border-radius', '0px', 'important'); 
+          previewArea.appendChild(div);
+      });
+
+      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স)
       return !result.limitReached; 
   }
 
-  // A4 ভেক্টর পিডিএফ জেনারেশন
-  function generatePhotoSheetPDF() {
-      const activeCount = psImages.filter(img => img !== null).length;
-      if (activeCount === 0) {
+  // A4 ভেক্টর পিডিএফ জেনারেশন (১০০% অরিজিনাল কোয়ালিটি ও একদম চিকন বর্ডার সহ) [1.1.2]
+  async function generatePhotoSheetPDF() {
+      const { jsPDF } = window.jspdf;
+      const { coords } = getDynamicCoords();
+      if(coords.length === 0) {
           alert("Please upload at least one photo to save PDF!");
           return;
       }
       
       const statusEl = document.getElementById('payslipGeneratorStatus') || document.createElement('div');
-      statusEl.innerText = "Generating high-definition PDF sheet...";
+      statusEl.innerText = "Generating 100% original high-definition PDF...";
       
-      const template = document.getElementById('a4-preview-area');
-      
-      // html2canvas দিয়ে ৩ গুণ ডেনসিটিতে ক্রিস্প স্ন্যাপশট নেবে
-      html2canvas(template, {
-          scale: 3,
-          useCORS: true,
-          logging: false
-      }).then(canvas => {
-          const imgData = canvas.toDataURL('image/jpeg', 1.0);
-          const { jsPDF } = window.jspdf;
+      // ডিরেক্ট ভেক্টর মেথড: html2canvas স্ক্রিনশট বাদ দিয়ে সরাসরি মূল ইমেজ ডাটা পিডিএফে এম্বেড করা হবে [1.1.2]
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const showBorder = document.getElementById('psBorder').checked;
+
+      coords.forEach(p => {
+          // ইমেজের জেনুইন ফরম্যাট ডিটেক্ট করবে (PNG নাকি JPEG) [1.1.2]
+          let imgFormat = 'JPEG';
+          if (p.img.startsWith('data:image/png')) {
+              imgFormat = 'PNG';
+          }
+
+          // মূল আপলোড করা হাই-রেজোলিউশন ইমেজটি সরাসরি পিডিএফে অ্যাড করবে (কোয়ালিটি লস হবে না) [1.1.2]
+          pdf.addImage(p.img, imgFormat, p.x, p.y, p.w, p.h, undefined, 'FAST');
           
-          // স্ট্যান্ডার্ড এ৪ সাইজ পিডিএফ
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-          pdf.save(`photo_print_sheet_${Date.now()}.pdf`);
-          statusEl.innerText = "Ready to generate";
+          if(showBorder) {
+              // পিডিএফ বর্ডারটি একদম সুতোর মতো চিকন করতে লাইন উইডথ 0.05mm করা হয়েছে [1.1.2]
+              pdf.setDrawColor(0, 0, 0); // কুচকুচে কালো রঙের বর্ডার লাইন
+              pdf.setLineWidth(0.05);    // চরম চিকন হেয়ারলাইন বর্ডার [1.1.2]
+              pdf.rect(p.x, p.y, p.w, p.h);
+          }
       });
+
+      pdf.save(`PhotoSheet_Genuine_${Date.now()}.pdf`);
+      statusEl.innerText = "Ready to generate";
   }
 
   // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট
