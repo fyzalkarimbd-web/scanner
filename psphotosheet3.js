@@ -1,11 +1,11 @@
-// ৫ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে
-  let psImages = [null, null, null, null, null];
+// ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে (সংশোধিত)
+  let psImages = [null, null, null, null, null, null, null, null, null, null];
 
-  function openPhotoSheetModal() {
-      document.getElementById('photoSheetModal').style.display = 'flex';
-      if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
-      updatePsPreview();
-  }
+function openPhotoSheetModal() {
+    if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
+    document.getElementById('photoSheetModal').style.display = 'flex';
+}
+
 
   function closePhotoSheetModal() {
       document.getElementById('photoSheetModal').style.display = 'none';
@@ -24,7 +24,7 @@
               document.getElementById(`prev${index+1}`).style.display = 'block';
               document.getElementById(`plus${index+1}`).style.display = 'none';
               
-              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে (NEW UPDATE)
+              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
               const delBtn = document.getElementById(`delBtn${index+1}`);
               if (delBtn) delBtn.style.display = 'flex';
               
@@ -49,7 +49,7 @@
       document.getElementById(`plus${index+1}`).style.display = 'block';
       document.getElementById(`count${index+1}`).value = 0;
       
-      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে (NEW UPDATE)
+      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে
       const delBtn = document.getElementById(`delBtn${index+1}`);
       if (delBtn) delBtn.style.display = 'none';
       
@@ -81,7 +81,7 @@
       }
   }
 
-  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার অপ্টিমাইজেশন সহ)
+  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার ও স্ট্রেচিং অপ্টিমাইজেশন সহ)
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
       const limitWarning = document.getElementById('limitWarning');
@@ -96,11 +96,11 @@
       let hasAnyPhoto = false;
       const showBorder = document.getElementById('psBorder').checked;
       
-      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স) [1.1.2]
+      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স)
       const borderStyle = showBorder ? '1px solid #000000' : 'none';
 
-      // ৫টি রোর প্রতিটি ইমেজ প্রসেস করবে
-      for (let i = 0; i < 5; i++) {
+      // ১০টি রোর প্রতিটি ইমেজ প্রসেস করবে (সংশোধিত)
+      for (let i = 0; i < 10; i++) {
           if (psImages[i]) {
               hasAnyPhoto = true;
               const count = parseInt(document.getElementById(`count${i+1}`).value) || 0;
@@ -178,7 +178,7 @@
       });
   }
 
-  // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট (১০০% নিখুঁত স্টুডিও সাইজ প্রিন্ট আউটপুট)
+  // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট (১০০% নিখুঁত স্টুডিও সাইজ প্রিন্ট আউটপুট - প্রিন্ট কপিতেও স্ট্রেচিং বন্ধ করা হয়েছে)
   function directPrintSheet() {
       const activeCount = psImages.filter(img => img !== null).length;
       if (activeCount === 0) {
@@ -190,8 +190,8 @@
       const borderCss = showBorder ? 'border: 1px solid #000000 !important; border-radius: 0px !important;' : 'border: none !important;';
       let itemsHTML = '';
 
-      // প্রিন্টিং পেজে মিলিমিটার মাপে ইমেজ ট্যাগ সাজাবে
-      for (let i = 0; i < 5; i++) {
+      // প্রিন্টিং পেজে মিলিমিটার মাপে ইমেজ ট্যাগ সাজাবে (সংশোধিত ১০ জন ইউজার)
+      for (let i = 0; i < 10; i++) {
           if (psImages[i]) {
               const count = parseInt(document.getElementById(`count${i+1}`).value) || 0;
               const size = document.getElementById(`size${i+1}`).value;
@@ -206,8 +206,9 @@
               }
 
               for (let j = 0; j < count; j++) {
+                  // align-self: flex-start !important; যুক্ত করা হয়েছে প্রিন্টিং কপিতেও স্ট্রেচিং বন্ধ করতে
                   itemsHTML += `
-                      <div class="print-photo-item" style="width: ${widthMm}mm; height: ${heightMm}mm; ${borderCss} box-sizing: border-box; overflow: hidden; display: inline-block; margin: 1.5mm;">
+                      <div class="print-photo-item" style="width: ${widthMm}mm; height: ${heightMm}mm; ${borderCss} box-sizing: border-box; overflow: hidden; display: inline-block; margin: 1.5mm; align-self: flex-start !important;">
                           <img src="${psImages[i]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
                       </div>
                   `;
@@ -217,6 +218,7 @@
 
       // নতুন প্রিন্ট ফ্রেন্ডলি উইন্ডো জেনারেট করবে
       const printWin = window.open('', '_blank');
+      // align-items: flex-start !important; যুক্ত করা হয়েছে প্রিন্টিং এ৪ ফ্রেমেও স্ট্রেচিং বন্ধ করতে
       printWin.document.write(`
           <html>
               <head>
@@ -230,6 +232,7 @@
                           flex-wrap: wrap;
                           gap: 1mm;
                           align-content: flex-start;
+                          align-items: flex-start !important;
                       }
                       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                   </style>
