@@ -1,11 +1,10 @@
 // ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে (সংশোধিত)
   let psImages = [null, null, null, null, null, null, null, null, null, null];
 
-function openPhotoSheetModal() {
+  function openPhotoSheetModal() {
     if(typeof setActiveMode === 'function') setActiveMode('mode-photo-sheet');
     document.getElementById('photoSheetModal').style.display = 'flex';
 }
-
 
   function closePhotoSheetModal() {
       document.getElementById('photoSheetModal').style.display = 'none';
@@ -24,9 +23,9 @@ function openPhotoSheetModal() {
               document.getElementById(`prev${index+1}`).style.display = 'block';
               document.getElementById(`plus${index+1}`).style.display = 'none';
               
-              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
+              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে (NEW UPDATE)
               const delBtn = document.getElementById(`delBtn${index+1}`);
-              if (delBtn) delBtn.style.display = 'flex';
+              if (delBtn) delBtn.style.setProperty('display', 'flex', 'important');
               
               // প্রথম ছবি আপলোডের পর ডিফল্ট ১ কপি সেট হবে
               const countInput = document.getElementById(`count${index+1}`);
@@ -49,9 +48,9 @@ function openPhotoSheetModal() {
       document.getElementById(`plus${index+1}`).style.display = 'block';
       document.getElementById(`count${index+1}`).value = 0;
       
-      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে
+      // ছবি ডিলিট হয়ে যাওয়ার পর বাটনটি পুনরায় হাইড করে দেবে (NEW UPDATE)
       const delBtn = document.getElementById(`delBtn${index+1}`);
-      if (delBtn) delBtn.style.display = 'none';
+      if (delBtn) delBtn.style.setProperty('display', 'none', 'important');
       
       updatePsPreview();
   }
@@ -96,7 +95,7 @@ function openPhotoSheetModal() {
       let hasAnyPhoto = false;
       const showBorder = document.getElementById('psBorder').checked;
       
-      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স)
+      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স) (NEW UPDATE)
       const borderStyle = showBorder ? '1px solid #000000' : 'none';
 
       // ১০টি রোর প্রতিটি ইমেজ প্রসেস করবে (সংশোধিত)
@@ -123,8 +122,9 @@ function openPhotoSheetModal() {
                   item.className = 'grid-photo-item';
                   item.style.width = widthPercent;
                   item.style.aspectRatio = aspectRatio;
-                  item.style.border = borderStyle; // বর্ডার সেটিংস সরাসরি রান করবে
-                  item.style.borderRadius = "0px"; // কোণা গোল হওয়া সম্পূর্ণ বন্ধ
+                  // বর্ডার সেটিংস সরাসরি এবং শতভাগ সিকিউরড করার জন্য setProperty ব্যবহার করা হয়েছে
+                  item.style.setProperty('border', borderStyle, 'important'); 
+                  item.style.setProperty('border-radius', '0px', 'important'); // কোণা গোল হওয়া সম্পূর্ণ বন্ধ
                   item.innerHTML = `<img src="${psImages[i]}" style="width:100%; height:100%; object-fit:cover;" />`;
                   previewArea.appendChild(item);
 
