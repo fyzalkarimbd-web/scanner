@@ -96,7 +96,7 @@
       const showBorder = document.getElementById('psBorder').checked;
       
       // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স) (NEW UPDATE)
-      const borderStyle = showBorder ? '1px solid #000000' : 'none';
+      const borderStyle = showBorder ? '0.1px solid #555555' : 'none';
 
       // ১০টি রোর প্রতিটি ইমেজ প্রসেস করবে (সংশোধিত)
       for (let i = 0; i < 10; i++) {
