@@ -1,7 +1,7 @@
 // ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে
   let psImages = [null, null, null, null, null, null, null, null, null, null];
 
-  // ফিজিক্যাল রিয়েল সাইজ মিলিমিটারে (NEW UPDATE - আপনার কোড থেকে সংগৃহীত)
+  // ফিজিক্যাল রিয়েল সাইজ মিলিমিটারে (আপনার কোড থেকে সংগৃহীত)
   const PP_W = 38.1;  // ১.৫ ইঞ্চি (পাসপোর্ট সাইজ প্রস্থ)
   const PP_H = 48.26; // ১.৯ ইঞ্চি (পাসপোর্ট সাইজ উচ্চতা)
   const ST_W = 22.0;   // ২২ মিমি (স্ট্যাম্প সাইজ প্রস্থ)
@@ -35,7 +35,10 @@
               document.getElementById(`prev${idx}`).src = e.target.result;
               document.getElementById(`prev${idx}`).style.display = 'block';
               document.getElementById(`plus${idx}`).style.display = 'none';
-              document.getElementById(`delBtn${idx}`).style.setProperty('display', 'flex', 'important');
+              
+              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
+              const delBtn = document.getElementById(`delBtn${idx}`);
+              if (delBtn) delBtn.style.setProperty('display', 'flex', 'important');
               
               // প্রথম ছবি আপলোডের পর ডিফল্ট ১ কপি সেট হবে
               const countInput = document.getElementById(`count${idx}`);
@@ -62,7 +65,7 @@
       updatePsPreview();
   }
 
-  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং
+  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত বাগ-ফিক্স)
   function adjustPhotoCount(index, val) {
       if (!psImages[index]) {
           alert("Please upload a photo for this row first!");
@@ -74,20 +77,19 @@
       
       if (target < 0) target = 0;
       
-      // লিমিট চেক
       countInput.value = target;
       
-      // প্রিভিউ জেনারেট করবে
+      // প্রিভিউ জেনারেট করবে এবং লিমিট রিচড স্ট্যাটাস চেক করবে
       const isOk = updatePsPreview();
       
-      // যদি পেপারের বাউন্ডারি ক্রস করে, তবে আগের ভ্যালু ফিরিয়ে আনবে
-      if (!isOk) {
+      // যদি পেপারের বাউন্ডারি ক্রস করে (isOk === false), তবে আগের ভ্যালু ফিরিয়ে আনবে
+      if (isOk === false) {
           countInput.value = current;
           updatePsPreview();
       }
   }
 
-  // ৮. আপনার নতুন কোড অনুযায়ী ফিজিক্যাল পেপার মার্জিন ও ইন্টার-ফটো গ্যাপ ক্যালকুলেশন ইঞ্জিন (NEW UPDATE)
+  // আপনার নতুন কোড অনুযায়ী ফিজিক্যাল পেপার মার্জিন ও ইন্টার-ফটো গ্যাপ ক্যালকুলেশন ইঞ্জিন
   function getDynamicCoords() {
       const margin = 0.53; // ২ পিক্সেল ফিজিক্যাল মার্জিন (0.53mm)
       let currentY = margin;
@@ -140,7 +142,7 @@
       return { coords, limitReached };
   }
 
-  // ৯. লাইভ এ৪ প্রিভিউ জেনারেটর (আপনার নতুন মার্জিন ও বর্ডার গাইডলাইন সহ) (NEW UPDATE)
+  // লাইভ এ৪ প্রিভিউ জেনারেটর (সংশোধিত বাগ-ফিক্স)
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
       const result = getDynamicCoords();
@@ -153,14 +155,14 @@
       
       if(coords.length === 0) {
           previewArea.innerHTML = '<p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #94a3b8; font-size: 12px; font-weight: 700;">No Image Selected</p>';
-          return;
+          return true; // মডাল ক্লিয়ার থাকলে ট্রু রিটার্ন করবে
       }
 
       // এ৪ প্রিভিউ এরিয়ার উইডথ অনুযায়ী স্কেল রেশিও নির্ধারণ
       const scale = previewArea.clientWidth / 210; 
       const showBorder = document.getElementById('psBorder').checked;
       
-      // ছবির চারপাশের বর্ডারটি নিখুঁতভাবে ১ পিক্সেল করার জন্য setProperty ব্যবহার করা হয়েছে
+      // ছবির চারপাশের বর্ডারটি ১ পিক্সেল করবে
       const borderStyle = showBorder ? '1px solid #000000' : 'none';
 
       coords.forEach(p => {
@@ -173,13 +175,46 @@
           div.style.backgroundImage = "url(" + p.img + ")";
           div.style.backgroundSize = 'cover';
           div.style.backgroundPosition = 'center';
-          div.style.setProperty('border', borderStyle, 'important'); // বর্ডার ১ পিক্সেল সেট করবে
-          div.style.setProperty('border-radius', '0px', 'important'); // কোণা গোল হওয়া সম্পূর্ণ বন্ধ
+          div.style.setProperty('border', borderStyle, 'important'); 
+          div.style.setProperty('border-radius', '0px', 'important'); 
           previewArea.appendChild(div);
+      });
+
+      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স)
+      return !result.limitReached; 
+  }
+
+  // A4 ভেক্টর পিডিএফ জেনারেশন
+  function generatePhotoSheetPDF() {
+      const activeCount = psImages.filter(img => img !== null).length;
+      if (activeCount === 0) {
+          alert("Please upload at least one photo to save PDF!");
+          return;
+      }
+      
+      const statusEl = document.getElementById('payslipGeneratorStatus') || document.createElement('div');
+      statusEl.innerText = "Generating high-definition PDF sheet...";
+      
+      const template = document.getElementById('a4-preview-area');
+      
+      // html2canvas দিয়ে ৩ গুণ ডেনসিটিতে ক্রিস্প স্ন্যাপশট নেবে
+      html2canvas(template, {
+          scale: 3,
+          useCORS: true,
+          logging: false
+      }).then(canvas => {
+          const imgData = canvas.toDataURL('image/jpeg', 1.0);
+          const { jsPDF } = window.jspdf;
+          
+          // স্ট্যান্ডার্ড এ৪ সাইজ পিডিএফ
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+          pdf.save(`photo_print_sheet_${Date.now()}.pdf`);
+          statusEl.innerText = "Ready to generate";
       });
   }
 
-  // ১০. ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট (আপনার নতুন মার্জিন ও বর্ডার সেটিংস সহ) (NEW UPDATE)
+  // ফিজিক্যাল মিলিমিটার লকড ডিরেক্ট প্রিন্ট
   function directPrintSheet() {
       const { coords } = getDynamicCoords();
       if(coords.length === 0) return;
@@ -188,7 +223,6 @@
       printWindow.document.write('<html><head><style>@page { margin: 0; size: A4; } body { margin: 0; padding: 0; } * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }</style></head><body>');
       
       const showBorder = document.getElementById('psBorder').checked;
-      // আপনার নতুন কোড অনুযায়ী ডিরেক্ট প্রিন্ট কপিতে সূক্ষ্ম ফিজিক্যাল বর্ডার (0.1mm) তৈরি হবে
       const borderCss = showBorder ? 'border: 0.1mm solid #ccc; border-radius: 0px !important;' : 'border: none !important;';
 
       coords.forEach(p => {
@@ -198,25 +232,4 @@
       printWindow.document.close();
       
       setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
-  }
-
-  // ১১. A4 ভেক্টর পিডিএফ জেনারেশন (আপনার নতুন মার্জিন ও পিডিএফ বর্ডার সেটিংস সহ) (NEW UPDATE)
-  async function generatePhotoSheetPDF() {
-      const { jsPDF } = window.jspdf;
-      const { coords } = getDynamicCoords();
-      if(coords.length === 0) return;
-      
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const showBorder = document.getElementById('psBorder').checked;
-
-      coords.forEach(p => {
-          pdf.addImage(p.img, 'JPEG', p.x, p.y, p.w, p.h);
-          if(showBorder) {
-              // আপনার নতুন কোড অনুযায়ী পিডিএফে সূক্ষ্ম ডার্ক গ্রে ভেক্টর বর্ডার (LineWidth: 0.1) রেন্ডার হবে
-              pdf.setDrawColor(200, 200, 200); 
-              pdf.setLineWidth(0.1); 
-              pdf.rect(p.x, p.y, p.w, p.h);
-          }
-      });
-      pdf.save("PhotoSheet_www.idcardscannerpro.com.pdf");
   }
