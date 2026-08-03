@@ -1,5 +1,4 @@
-<!-- A4 Photo Sheet Modal START -->
-  /* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
+/* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
   #grid-page-unit {
     width: 210mm;
     height: 297mm; 
@@ -164,7 +163,7 @@
   /* --- প্রিন্ট সেটিংস (A4 ফিজিক্যাল সাইজ নিশ্চিত করবে) --- */
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+    body { margin: 0; padding: 0; background: #fff; }
     
     #grid-page-unit { 
         transform: none !important; 
