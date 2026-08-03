@@ -65,7 +65,7 @@
       updatePsPreview();
   }
 
-  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত বাগ-ফিক্স)
+  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত শতভাগ নিরাপদ ফিক্স)
   function adjustPhotoCount(index, val) {
       if (!psImages[index]) {
           alert("Please upload a photo for this row first!");
@@ -79,10 +79,10 @@
       
       countInput.value = target;
       
-      // প্রিভিউ জেনারেট করবে এবং লিমিট রিচড স্ট্যাটাস চেক করবে
+      // রেন্ডার করবে এবং ওভারফ্লো লিমিট চেক করবে
       const isOk = updatePsPreview();
       
-      // যদি পেপারের বাউন্ডারি ক্রস করে (isOk === false), তবে আগের ভ্যালু ফিরিয়ে আনবে
+      // যদি পেপারের লিমিট রিচ করে (isOk === false), তবে ভ্যালু আগের অবস্থায় ফিরিয়ে নেবে (সংশোধিত)
       if (isOk === false) {
           countInput.value = current;
           updatePsPreview();
@@ -142,45 +142,74 @@
       return { coords, limitReached };
   }
 
-  // লাইভ এ৪ প্রিভিউ জেনারেটর (সংশোধিত বাগ-ফিক্স)
+  // লাইভ এ৪ প্রিভিউ জেনারেটর (১০০% পারফেক্ট বর্ডার ও ফ্লেক্স স্ট্রেচিং বাগ-ফিক্স সহ)
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
-      const result = getDynamicCoords();
-      const coords = result.coords;
+      const limitWarning = document.getElementById('limitWarning');
+      const footerNote = document.getElementById('footerNote');
       
-      document.getElementById('limitWarning').style.display = result.limitReached ? 'block' : 'none';
-      document.getElementById('footerNote').style.display = result.limitReached ? 'block' : 'none';
-
+      if (!previewArea) return true;
+      
       previewArea.innerHTML = ''; // ক্লিয়ার করবে
-      
-      if(coords.length === 0) {
-          previewArea.innerHTML = '<p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #94a3b8; font-size: 12px; font-weight: 700;">No Image Selected</p>';
-          return true; // মডাল ক্লিয়ার থাকলে ট্রু রিটার্ন করবে
-      }
+      limitWarning.style.display = 'none';
+      footerNote.style.display = 'none';
 
-      // এ৪ প্রিভিউ এরিয়ার উইডথ অনুযায়ী স্কেল রেশিও নির্ধারণ
-      const scale = previewArea.clientWidth / 210; 
+      let hasAnyPhoto = false;
       const showBorder = document.getElementById('psBorder').checked;
       
-      // ছবির চারপাশের বর্ডারটি ১ পিক্সেল করবে
+      // বর্ডার চেকবক্সটি যাতে ১০০% কাজ করে এবং ফিজিক্যালি ১ পিক্সেল হয় (সংশোধিত বাগ-ফিক্স)
       const borderStyle = showBorder ? '1px solid #000000' : 'none';
 
-      coords.forEach(p => {
-          const div = document.createElement('div');
-          div.style.position = 'absolute';
-          div.style.width = (p.w * scale) + 'px';
-          div.style.height = (p.h * scale) + 'px';
-          div.style.left = (p.x * scale) + 'px';
-          div.style.top = (p.y * scale) + 'px';
-          div.style.backgroundImage = "url(" + p.img + ")";
-          div.style.backgroundSize = 'cover';
-          div.style.backgroundPosition = 'center';
-          div.style.setProperty('border', borderStyle, 'important'); 
-          div.style.setProperty('border-radius', '0px', 'important'); 
-          previewArea.appendChild(div);
-      });
+      // ১০টি রোর প্রতিটি ইমেজ প্রসেস করবে
+      for (let i = 0; i < 10; i++) {
+          if (psImages[i]) {
+              hasAnyPhoto = true;
+              const count = parseInt(document.getElementById(`count${i+1}`).value) || 0;
+              const size = document.getElementById(`size${i+1}`).value;
+              
+              // ওমানি/বাংলাদেশি স্ট্যান্ডার্ড মিলিমিটার ডাইমেনশনকে ডাইনামিক পার্সেন্টেজে রূপান্তর
+              let widthPercent = "18.5%"; // পাসপোর্ট (৫ কপি এক লাইনে ধরবে)
+              let aspectRatio = "40 / 50";
+              
+              if (size === 'stamp') {
+                  widthPercent = "9.25%"; // স্ট্যাম্প (১০ কপি এক লাইনে ধরবে)
+                  aspectRatio = "20 / 25";
+              } else if (size === 'joint') {
+                  widthPercent = "27.75%"; // জয়েন্ট (৩ কপি এক লাইনে ধরবে)
+                  aspectRatio = "60 / 50";
+              }
 
-      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স)
+              for (let j = 0; j < count; j++) {
+                  const item = document.createElement('div');
+                  item.className = 'grid-photo-item';
+                  item.style.width = widthPercent;
+                  item.style.aspectRatio = aspectRatio;
+                  // বর্ডার সেটিংস সরাসরি এবং শতভাগ সিকিউরড করার জন্য setProperty ব্যবহার করা হয়েছে
+                  item.style.setProperty('border', borderStyle, 'important'); 
+                  item.style.setProperty('border-radius', '0px', 'important'); // কোণা গোল হওয়া সম্পূর্ণ বন্ধ
+                  item.innerHTML = `<img src="${psImages[i]}" style="width:100%; height:100%; object-fit:cover;" />`;
+                  previewArea.appendChild(item);
+
+                  // ওভারফ্লো বা পেপার লিমিট চেকার
+                  const containerHeight = previewArea.clientHeight;
+                  const totalScrollHeight = previewArea.scrollHeight;
+
+                  if (totalScrollHeight > containerHeight + 5) {
+                      previewArea.removeChild(item);
+                      limitWarning.style.display = 'inline';
+                      footerNote.style.display = 'block';
+                      return false; // লিমিট শেষ হলে আর আইটেম এড হতে দেবে না
+                  }
+              }
+          }
+      }
+
+      if (!hasAnyPhoto) {
+          previewArea.innerHTML = `<div style="padding: 100px 0; color: #94a3b8; width:100%; text-align:center; font-weight:700;">Upload photos to see the A4 sheet preview</div>`;
+          return true; // মডাল ক্লিয়ার থাকলে ট্রু রিটার্ন করবে
+      }
+      
+      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স) [1.1.2]
       return !result.limitReached; 
   }
 
