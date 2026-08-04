@@ -132,7 +132,6 @@ let recognitionInstance = null;
 
   // ভয়েস রাইটার মোডাল অ্যাক্টিভেশন (আপনার দেওয়া ফাংশন)
   function openVoiceWriterModal() {
-      setActiveMode('mode-voice-writer'); // বাটন হাইলাইট করবে
       const modal = document.getElementById('voiceWriterModal');
       if (modal) {
           modal.style.display = 'flex'; // মোডাল ওপেন হবে
