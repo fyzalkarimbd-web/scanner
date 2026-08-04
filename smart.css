@@ -1,0 +1,138 @@
+ /* Waveform Animation */
+  .vw-wave-container {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 40px;
+      margin-bottom: 20px;
+  }
+  .vw-wave-bar {
+      width: 4px;
+      height: 10px;
+      background: #4f46e5;
+      border-radius: 4px;
+      animation: vwWaveAnim 1.2s ease-in-out infinite;
+  }
+  .vw-wave-bar:nth-child(1) { animation-delay: 0.1s; }
+  .vw-wave-bar:nth-child(2) { animation-delay: 0.3s; }
+  .vw-wave-bar:nth-child(3) { animation-delay: 0.6s; }
+  .vw-wave-bar:nth-child(4) { animation-delay: 0.2s; }
+  .vw-wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+  @keyframes vwWaveAnim {
+      0%, 100% { height: 10px; }
+      50% { height: 35px; }
+  }
+
+  /* Record Button Styling with Pulsing Glow */
+  .vw-record-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5, #3b82f6);
+      color: #ffffff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      cursor: pointer;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+      transition: all 0.3s ease;
+      outline: none;
+  }
+  .vw-record-btn.recording {
+      background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+      box-shadow: 0 0 0 10px rgba(239, 68, 68, 0.2), 0 10px 25px rgba(239, 68, 68, 0.4) !important;
+      animation: vwRecordPulse 1.5s infinite;
+  }
+  @keyframes vwRecordPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+  }
+
+  /* Output Text Box */
+  #voiceWriterOutput {
+      width: 100%;
+      padding: 15px;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      font-size: 16px;
+      color: #1e293b;
+      outline: none;
+      box-sizing: border-box;
+      resize: vertical;
+      min-height: 140px;
+      max-height: 250px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      text-align: left;
+  }
+  #voiceWriterOutput:focus {
+      border-color: #4f46e5;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08);
+  }
+
+  /* Settings Row */
+  .vw-settings {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: #f8fafc;
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      text-align: left;
+  }
+  .vw-settings label {
+      font-size: 20px;
+      font-weight: 700;
+      color: #475569;
+  }
+  .vw-lang-select {
+      padding: 8px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: bold;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+  }
+
+  /* PC Microphone Reminder Box */
+  .vw-mic-notice {
+      background: #fff7ed;
+      border: 1px solid #ffedd5;
+      border-left: 5px solid #f59e0b;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: left;
+      color: #7c2d12;
+      font-size: 17px;
+      line-height: 1.5;
+      font-weight: 600;
+  }
+
+  /* Status and Instructions */
+  .vw-status {
+      font-size: 18px;
+      font-weight: 700;
+      color: #7900f9;
+      margin-bottom: 20px;
+      min-height: 21px;
+  }
+
+  @media (max-width: 600px) {
+      .vw-settings { flex-direction: column; gap: 10px; text-align: center; }
+      .vw-lang-select { width: 100%; }
+      #voiceWriterOutput { min-height: 120px; }
+      .vw-mic-notice { padding: 12px; font-size: 12.5px; }
+  }
