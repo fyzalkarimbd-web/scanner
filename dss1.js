@@ -1,4 +1,4 @@
-// স্ক্রিপ্টের ভেতরে ফর্ম লিংকটি কনফিগার করা হলো
+        // স্ক্রিপ্টের ভেতরে ফর্ম লিংকটি কনফিগার করা হলো
         const FORM_IFRAME_URL = 'https://lctcbd.com/bhata_form.php';
 
         // বাংলা সংখ্যাকে ইংরেজিতে রূপান্তর
@@ -9,7 +9,6 @@
 
         // পেজ লোড হওয়ার সাথে সাথে ড্রপডাউন জেনারেট, NID রিড এবং iFrame সেট করা
         document.addEventListener('DOMContentLoaded', () => {
-            // iFrame URL ডাইনামিকভাবে স্ক্রিপ্ট থেকে সেট করা
             const iframeElement = document.getElementById('bhataFormIframe');
             if (iframeElement) {
                 iframeElement.src = FORM_IFRAME_URL;
@@ -51,7 +50,8 @@
             const month = document.getElementById('dobMonth').value;
             const year = document.getElementById('dobYear').value;
 
-            const statusDiv = document.getElementById('status');
+            // Updated status element selector
+            const statusDiv = document.getElementById('appStatus');
             const resultDiv = document.getElementById('result');
 
             if (!nidInput || day === '00' || !month || !year) {
@@ -119,7 +119,7 @@
                         <div style="color: #dc2626; text-align: center; padding: 10px 0;">
                             <i class="fa-solid fa-triangle-exclamation" style="font-size: 24px; margin-bottom: 8px;"></i><br>
                             <strong>কোনো তথ্য পাওয়া যায়নি!</strong><br>
-                            <span style="font-size: 12px; color: #64748b; display: block; margin-top: 5px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে, অথবা ২০২৫-২০২৬ সালের আগের।</span>
+                            <span style="font-size: 12px; color: #64748b; display: block; margin-top: 5px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে।</span>
                         </div>
                     `;
                     resultDiv.style.display = 'block';
