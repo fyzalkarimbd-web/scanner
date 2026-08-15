@@ -119,7 +119,7 @@
                         <div style="color: #dc2626; text-align: center; padding: 10px 0;">
                             <i class="fa-solid fa-triangle-exclamation" style="font-size: 24px; margin-bottom: 8px;"></i><br>
                             <strong>কোনো তথ্য পাওয়া যায়নি!</strong><br>
-                            <span style="font-size: 12px; color: #64748b; display: block; margin-top: 5px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে।</span>
+                            <span style="font-size: 12px; color: #64748b; display: block; margin-top: 5px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে। অথবা আবেদনটি ২০২৫-২০২৬ সালের আগে করা হয়েছিল, তাই ট্র্যাকিং করা সম্ভব নয়!</span>
                         </div>
                     `;
                     resultDiv.style.display = 'block';
