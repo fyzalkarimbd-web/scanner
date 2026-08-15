@@ -1,19 +1,11 @@
-        // স্ক্রিপ্টের ভেতরে ফর্ম লিংকটি কনফিগার করা হলো
-        const FORM_IFRAME_URL = 'https://lctcbd.com/bhata_form.php';
-
-        // বাংলা সংখ্যাকে ইংরেজিতে রূপান্তর
+ // বাংলা সংখ্যাকে ইংরেজিতে রূপান্তর
         function convertBanglaToEnglishNumber(str) {
             const banglaNumbers = { '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4', '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9' };
             return str.replace(/[০-৯]/g, match => banglaNumbers[match]);
         }
 
-        // পেজ লোড হওয়ার সাথে সাথে ড্রপডাউন জেনারেট, NID রিড এবং iFrame সেট করা
+        // পেজ লোড হওয়ার সাথে সাথে ড্রপডাউন জেনারেট এবং NID রিড করা
         document.addEventListener('DOMContentLoaded', () => {
-            const iframeElement = document.getElementById('bhataFormIframe');
-            if (iframeElement) {
-                iframeElement.src = FORM_IFRAME_URL;
-            }
-
             const daysList = document.getElementById('daysList');
             for (let i = 1; i <= 31; i++) {
                 let opt = document.createElement('option');
@@ -33,6 +25,22 @@
                 document.getElementById('nid').value = savedNid;
             }
 
+            // পাসওয়ার্ড কপি বাটন ফাংশনালিটি
+            const copyPassBtn = document.getElementById('copyPassBtn');
+            if (copyPassBtn) {
+                copyPassBtn.addEventListener('click', function() {
+                    const passText = document.getElementById('sitePassword').innerText;
+                    navigator.clipboard.writeText(passText).then(() => {
+                        this.innerHTML = '<i class="fa-solid fa-check"></i> কপি হয়েছে!';
+                        this.style.background = '#059669';
+                        setTimeout(() => {
+                            this.innerHTML = '<i class="fa-regular fa-copy"></i> পাসওয়ার্ড কপি করুন';
+                            this.style.background = '#2563eb';
+                        }, 2000);
+                    });
+                });
+            }
+
             // পেজ রিলোড বাটন ইভেন্ট
             document.getElementById('reloadBtn').addEventListener('click', () => {
                 window.location.reload();
@@ -50,7 +58,6 @@
             const month = document.getElementById('dobMonth').value;
             const year = document.getElementById('dobYear').value;
 
-            // Updated status element selector
             const statusDiv = document.getElementById('appStatus');
             const resultDiv = document.getElementById('result');
 
