@@ -30,7 +30,7 @@ let currentCaptchaToken = null;
                     <strong>ট্র্যাকিং নম্বর:</strong> <span style="color: #059669; font-weight: 700;">${cleanId}</span>
                 </div>
                 <a href="${downloadUrl}" target="_blank" class="pdf-download-link">
-                    <i class="fa-solid fa-file-pdf"></i> আবেদন কপি (PDF) ডাউনলোড করুন
+                    <i class="fa-solid fa-file-pdf"></i> আবেদন PDF ডাউনলোড করুন!
                 </a>
                 <div style="font-size: 13px; color: #64748b; margin-top: 10px; font-weight: 500; line-height: 1.5;">
                     <i class="fa-solid fa-circle-info" style="color: #2563eb; margin-right: 4px;"></i>
