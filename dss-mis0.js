@@ -1,4 +1,4 @@
- let currentCaptchaToken = null;
+let currentCaptchaToken = null;
 
         // বাংলা সংখ্যাকে ইংরেজিতে রূপান্তর
         function convertBanglaToEnglishNumber(str) {
@@ -13,7 +13,7 @@
             const cleanId = convertBanglaToEnglishNumber(rawId);
             const pdfResult = document.getElementById('pdfResult');
             
-            // শুধুমাত্র ১০ সংখ্যার ডিজিট ভ্যালিডেশন (Regex: ঠিক ১০টি ইংরেজি সংখ্যা)
+            // শুধুমাত্র ১০ সংখ্যার ডিজিট ভ্যালিডেশন
             const isTenDigits = /^\d{10}$/.test(cleanId);
 
             if (!isTenDigits) {
@@ -30,8 +30,12 @@
                     <strong>ট্র্যাকিং নম্বর:</strong> <span style="color: #059669; font-weight: 700;">${cleanId}</span>
                 </div>
                 <a href="${downloadUrl}" target="_blank" class="pdf-download-link">
-                    <i class="fa-solid fa-file-pdf"></i> আবেদন PDF ডাউনলোড করুন!
+                    <i class="fa-solid fa-file-pdf"></i> আবেদন কপি (PDF) ডাউনলোড করুন
                 </a>
+                <div style="font-size: 13px; color: #64748b; margin-top: 10px; font-weight: 500; line-height: 1.5;">
+                    <i class="fa-solid fa-circle-info" style="color: #2563eb; margin-right: 4px;"></i>
+                    এই বাটনে ক্লিক করার পর আপনাকে ডাউনলোড পেজে নেওয়া হবে, যদি ডাউনলোড করতে সমস্যা হয়, তাহলে বারবার চেষ্টা করবেন।
+                </div>
             `;
         }
 
@@ -156,7 +160,7 @@
                     resultDiv.style.display = 'block';
                     captchaSection.style.display = 'none';
 
-                    // অটোমেটিকভাবে নিচের জেনারেটর বক্সে ট্র্যাকিং নম্বর বসিয়ে লিংক তৈরি করা (যদি ১০ সংখ্যার আইডি হয়)
+                    // অটোমেটিকভাবে নিচের জেনারেটর বক্সে ট্র্যাকিং নম্বর বসিয়ে লিংক তৈরি করা
                     if (trackingNumber !== 'পাওয়া যায়নি' && /^\d{10}$/.test(convertBanglaToEnglishNumber(trackingNumber))) {
                         document.getElementById('manualTrackingId').value = trackingNumber;
                         generatePdfLink(trackingNumber);
@@ -183,7 +187,7 @@
                         <div style="color: #dc2626; text-align: center; padding: 12px 0;">
                             <i class="fa-solid fa-triangle-exclamation" style="font-size: 26px; margin-bottom: 8px;"></i><br>
                             <strong>কোনো তথ্য পাওয়া যায়নি!</strong><br>
-                            <span style="font-size: 13px; color: #64748b; display: block; margin-top: 6px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে।</span>
+                            <span style="font-size: 13px; color: #64748b; display: block; margin-top: 6px;">এই এনআইডি দিয়ে হয়তো আবেদন করা হয়নি, অথবা এটি ইতোমধ্যে ভাতাভোগী তালিকায় যুক্ত হয়েছে, অথবা ২০২৫-২০২৬ সালের আগে আবেদন করা।</span>
                         </div>
                     `;
                     resultDiv.style.display = 'block';
