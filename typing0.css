@@ -1,0 +1,265 @@
+/* =========================================
+   A4 Document Writer - Complete CSS
+========================================= */
+
+/* --- ফন্ট ইম্পোর্ট --- */
+/* বাংলা এবং ইংরেজি ফন্টের জন্য গুগল ও অন্যান্য সোর্স থেকে ইম্পোর্ট */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&family=Noto+Serif+Bengali:wght@400;600&display=swap');
+@import url('https://fonts.maateen.me/solaiman-lipi/font.css');
+
+/* --- বেসিক মডাল স্টাইল (যদি আপনার থিমে না থাকে) --- */
+.crop-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(3px);}
+.crop-modal-content { background: #fff; margin: auto; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: slideDown 0.3s ease-out; max-height: 95vh; display: flex; flex-direction: column;}
+.close-crop-modal { position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; color: #64748b; cursor: pointer; z-index: 10; transition: 0.2s; line-height: 1;}
+.close-crop-modal:hover { color: #ef4444; }
+@keyframes slideDown { from {transform: translateY(-30px); opacity: 0;} to {transform: translateY(0); opacity: 1;}}
+
+
+/* --- টুলবার ডিজাইন (Toolbar Design) --- */
+.writer-toolbar {
+    background: #f8fafc; /* হালকা ধূসর ব্যাকগ্রাউন্ড */
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* টুলবার গ্রুপ ডিভাইডার */
+.toolbar-group {
+    display: flex;
+    gap: 5px;
+    padding-right: 10px;
+    border-right: 2px solid #e2e8f0; /* গ্রুপের মাঝে দাগ */
+    align-items: center;
+}
+.toolbar-group:last-child { border-right: none; padding-right: 0; }
+
+/* সাধারণ বাটন ও ইনপুট স্টাইল */
+.writer-toolbar button,
+.writer-toolbar select,
+.toolbar-color-item,
+.font-size-input {
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #334155;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px; /* সব বাটনের সমান উচ্চতা */
+    box-sizing: border-box;
+    min-width: 34px;
+}
+
+/* হোভার ইফেক্ট */
+.writer-toolbar button:hover, 
+.toolbar-color-item:hover, 
+.bullet-option:hover,
+.btn-xs:hover {
+    background: #e0f2fe; 
+    color: #0284c7; 
+    border-color: #7dd3fc;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* সিলেক্ট ড্রপডাউন স্টাইল */
+.writer-toolbar select { 
+    outline: none; 
+    padding-right: 25px; /* অ্যারো আইকনের জন্য জায়গা */
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+}
+
+/* --- কালার পিকার ডিজাইন (New Color Picker) --- */
+.toolbar-color-item { position: relative; overflow: hidden; padding: 4px 8px;}
+.toolbar-color-item input[type='color'] {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer; /* আসল ইনপুট লুকিয়ে রাখা */
+}
+.color-icon-wrapper { display: flex; flex-direction: column; align-items: center; line-height: 1; pointer-events: none;}
+.color-bar { width: 20px; height: 4px; margin-top: 3px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.1);}
+
+
+/* --- ফন্ট সাইজ কন্ট্রোল (Font Size Controls) --- */
+.font-size-controls { display: flex; gap: -1px; /* বাটনগুলো একসাথে লেগে থাকবে */ }
+.font-size-input {
+    width: 45px; text-align: center; border-radius: 0; z-index: 1;
+    -moz-appearance: textfield; font-weight: 600;
+}
+/* ইনপুটের স্পিনার অ্যারো লুকানো */
+.font-size-input::-webkit-outer-spin-button,
+.font-size-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.btn-xs { padding: 0 8px !important; font-size: 12px; font-weight: bold; }
+.btn-xs:first-child { border-radius: 6px 0 0 6px; }
+.btn-xs:last-child { border-radius: 0 6px 6px 0; }
+
+
+/* --- বুলেট লাইব্রেরি ড্রপডাউন (Bullet Dropdown) --- */
+.bullet-dropdown-container { position: relative; }
+.bullet-dropdown-menu {
+    display: none; /* ডিফল্টভাবে লুকানো */
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    z-index: 101;
+    width: 180px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+/* জাভাস্ক্রিপ্ট দিয়ে 'active' ক্লাস যুক্ত হলে মেনু দেখাবে */
+.bullet-dropdown-container.active .bullet-dropdown-menu { display: flex; }
+.bullet-option {
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 14px;
+    background: #f8fafc; transition: 0.2s;
+}
+
+
+/* --- A4 কন্টেইনার ও পেজ ডিজাইন (Page Area) --- */
+.a4-container-wrapper {
+    background: #334155; /* গাঢ় ব্যাকগ্রাউন্ড ফোকাসের জন্য */
+    padding: 40px 10px;
+    overflow-y: auto;
+    height: calc(90vh - 130px); /* হাইট অ্যাডজাস্টমেন্ট */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scrollbar-width: thin; scrollbar-color: #94a3b8 #334155;
+}
+
+/* একক পেজ ইউনিট */
+.page-unit {
+    position: relative;
+    width: 210mm; /* A4 প্রস্থ */
+    min-height: 297mm; /* A4 উচ্চতা */
+    background: white;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    box-sizing: border-box;
+}
+/* এডিটর বডি */
+.page-body {
+    width: 100%; min-height: 297mm; padding: 25mm 20mm; /* A4 মার্জিন */
+    outline: none;
+    font-family: 'SolaimanLipi', Arial, sans-serif; /* ডিফল্ট ফন্ট */
+    line-height: 1.6; color: #0f172a;
+    text-align: left; word-wrap: break-word; box-sizing: border-box;
+}
+.page-body:focus { box-shadow: inset 0 0 0 2px #e0f2fe; } /* ফোকাস ইফেক্ট */
+
+/* প্লেসহোল্ডার টেক্সট (যখন খালি থাকে) */
+.page-body:empty:before {
+    content: attr(data-placeholder);
+    color: #94a3b8; pointer-events: none; display: block; font-style: italic;
+}
+
+/* পেজ ডিলিট বাটন */
+.del-page-icon {
+    position: absolute; top: 15px; right: -45px;
+    background: #ef4444; color: #fff; border: none; width: 32px; height: 32px;
+    border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.2s; opacity: 0.6;
+}
+.page-unit:hover .del-page-icon { opacity: 1; right: -50px; }
+.del-page-icon:hover { background: #dc2626; transform: scale(1.1); }
+
+/* নতুন পেজ যুক্ত করার বাটন */
+.add-page-btn {
+    background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white;
+    border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer;
+    font-weight: 700; font-size: 15px; margin: 20px 0; transition: 0.3s;
+    box-shadow: 0 10px 20px -5px rgba(2, 132, 199, 0.5); display: flex; align-items: center; gap: 8px;
+}
+.add-page-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(2, 132, 199, 0.6); }
+
+
+/* --- অ্যাকশন বাটন এরিয়া (Bottom Actions) --- */
+.actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* তিনটি সমান কলাম */
+    gap: 15px;
+    padding: 15px 20px !important;
+    background: #fff !important;
+    border-top: 1px solid #e2e8f0;
+}
+.conv-btn-main {
+    padding: 12px; border: none; border-radius: 10px;
+    color: white; font-weight: 700; font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.conv-btn-main:hover { opacity: 0.9; transform: translateY(-2px); }
+
+
+/* =========================================
+   রেসপন্সিভ ডিজাইন (Mobile View)
+========================================= */
+@media (max-width: 850px) {
+    .crop-modal-content { width: 100% !important; height: 100% !important; max-height: none; border-radius: 0 !important;}
+    .writer-toolbar { padding: 5px; gap: 5px; justify-content: center; }
+    .toolbar-group { border-right: none; padding-right: 0; gap: 3px; flex-wrap: wrap; justify-content: center; }
+    
+    /* মোবাইলে বাটন ছোট করা */
+    .writer-toolbar button, .writer-toolbar select, .toolbar-color-item, .font-size-input, .btn-xs {
+        padding: 5px 8px; font-size: 13px; height: 32px; min-width: 30px;
+    }
+    .writer-toolbar select { max-width: 100px; } /* ফন্ট সিলেক্ট ছোট করা */
+    .font-size-input { width: 35px; }
+
+    /* বুলেট মেনু পজিশন ঠিক করা */
+    .bullet-dropdown-menu { left: -60px; width: 160px; }
+
+    /* A4 পেজ মোবাইলে ফিট করা */
+    .a4-container-wrapper { padding: 20px 5px; height: calc(100vh - 180px); }
+    .page-unit { width: 100%; margin-bottom: 20px; min-height: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .page-body { padding: 15mm 10mm; font-size: 16px; } /* মার্জিন ও ফন্ট কমানো */
+
+    /* ডিলিট আইকন ভেতরে আনা */
+    .del-page-icon { right: 5px; top: 5px; width: 28px; height: 28px; font-size: 12px; opacity: 0.8; background: rgba(239, 68, 68, 0.8);}
+    .page-unit:hover .del-page-icon { right: 5px; }
+
+    /* অ্যাকশন বাটন মোবাইলে এক কলামে */
+    .actions { grid-template-columns: 1fr; gap: 10px; padding: 10px !important;}
+}
+
+
+/* =========================================
+   প্রিন্ট স্টাইল (Print CSS)
+========================================= */
+@media print {
+    @page { size: A4; margin: 0; }
+    body > *:not(#writerModal) { display: none !important; } /* মডাল ছাড়া সব লুকানো */
+    /* মডালের ভেতরের অপ্রয়োজনীয় অংশ লুকানো */
+    .close-crop-modal, .writer-toolbar, .add-page-btn, .del-page-icon, .actions, h2 i { display: none !important; }
+    
+    #writerModal, .crop-modal-content, .cp-box, .a4-container-wrapper {
+        position: static !important; width: 100% !important; height: auto !important;
+        background: none !important; border: none !important; box-shadow: none !important;
+        padding: 0 !important; margin: 0 !important; overflow: visible !important;
+    }
+    .page-unit {
+        box-shadow: none; margin: 0; padding: 0; page-break-after: always;
+        width: 210mm; height: auto; position: static;
+    }
+    .page-body { padding: 25mm 20mm !important; } /* প্রিন্টে মার্জিন নিশ্চিত করা */
+}
