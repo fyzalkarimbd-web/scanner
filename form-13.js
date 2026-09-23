@@ -189,7 +189,7 @@
       const generateBtn = document.getElementById('f13GenerateBtn');
       const printBtn = document.getElementById('f13PrintBtn');
 
-      statusEl.innerText = '২-পৃষ্ঠার প্রফেশনাল পিডিএফ লেআউট তৈরি করা হচ্ছে...'; // অনুবাদ করা হয়েছে
+      statusEl.innerText = 'পিডিএফ লেআউট তৈরি করা হচ্ছে...'; // অনুবাদ করা হয়েছে
       generateBtn.disabled = true;
       printBtn.disabled = true;
 
@@ -215,7 +215,7 @@
           }
 
           if (!jsPDFClass || typeof window.html2canvas === 'undefined') {
-              throw new Error("পিডিএফ লাইব্রেরি এখনও লোড হচ্ছে। অনুগ্রহ করে ৫ সেকেন্ড অপেক্ষা করুন।"); // অনুবাদ করা হয়েছে
+              throw new Error("পিডিএফ লোড হচ্ছে অপেক্ষা করুন..."); // অনুবাদ করা হয়েছে
           }
 
           const pdf = new jsPDFClass('p', 'mm', 'a4');
@@ -259,28 +259,28 @@
                       }
                       statusEl.innerHTML = '<span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> প্রিন্ট উইন্ডো সফলভাবে ওপেন হয়েছে!</span>'; // অনুবাদ করা হয়েছে
                   } else {
-                      statusEl.innerText = '২-পৃষ্ঠার আবেদনপত্রটি পিডিএফ হিসেবে সেভ করা হচ্ছে...'; // অনুবাদ করা হয়েছে
+                      statusEl.innerText = 'পিডিএফ সেভ করা হচ্ছে...'; // অনুবাদ করা হয়েছে
                       pdf.save(fileName);
-                      statusEl.innerHTML = '<span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> ২-পৃষ্ঠার ফরম-১৩ সফলভাবে তৈরি হয়েছে!</span>'; // অনুবাদ করা হয়েছে
+                      statusEl.innerHTML = '<span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> পিডিএফ সফলভাবে তৈরি হয়েছে!</span>'; // অনুবাদ করা হয়েছে
                   }
 
                   generateBtn.disabled = false;
                   printBtn.disabled = false;
               }).catch(function(err) {
                   console.error("Page 2 render failed", err);
-                  statusEl.innerText = 'পিডিএফ-এর ২য় পৃষ্ঠা জেনারেট করতে সমস্যা হয়েছে'; // অনুবাদ করা হয়েছে
+                  statusEl.innerText = 'পিডিএফ জেনারেট করতে সমস্যা হয়েছে'; // অনুবাদ করা হয়েছে
                   generateBtn.disabled = false;
                   printBtn.disabled = false;
               });
           }).catch(function(err) {
               console.error("Page 1 render failed", err);
-              statusEl.innerText = 'পিডিএফ-এর ১ম পৃষ্ঠা জেনারেট করতে সমস্যা হয়েছে'; // অনুবাদ করা হয়েছে
+              statusEl.innerText = 'পিডিএফ জেনারেট করতে সমস্যা হয়েছে'; // অনুবাদ করা হয়েছে
               generateBtn.disabled = false;
               printBtn.disabled = false;
           });
 
       } catch (err) {
-          statusEl.innerText = '২-পৃষ্ঠার পিডিএফ জেনারেট করতে ত্রুটি হয়েছে'; // অনুবাদ করা হয়েছে
+          statusEl.innerText = 'পিডিএফ জেনারেট করতে ত্রুটি হয়েছে'; // অনুবাদ করা হয়েছে
           generateBtn.disabled = false;
           printBtn.disabled = false;
           console.error(err);
