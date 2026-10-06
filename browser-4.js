@@ -19,7 +19,18 @@ let activeBrowserCategory = 'all';
       { name: "Avast Secure Browser", category: "popular", logo: "https://www.avast.com/content/dam/avast/icon/40/secure-browser-color-1.svg", engine: "Blink (Chromium)", desc: "অ্যাভাস্ট অ্যান্টিভাইরাস টিম কর্তৃক তৈরি একটি অত্যন্ত নিরাপদ ব্রাউজার, যা ফিশিং ও ক্ষতিকর ম্যালওয়্যার ব্লক করে।", url: "https://www.avast.com/secure-browser", win: true, android: true, ios: true, linux: false },
       { name: "AVG Secure Browser", category: "popular", logo: "https://play-lh.googleusercontent.com/MUEPenG8G2r1HDdg3frgMkxYXv92Zy87kmLGux6tyKY3p0kikK27rmEtWYZNXy4upDUvg9ssNbbjvz1Bqjbh=w240-h480", engine: "Blink (Chromium)", desc: "এভিজি সিকিউরিটি ল্যাব দ্বারা প্রস্তুতকৃত বিশেষ নিরাপদ ব্রাউজার, যা ট্র্যাকিং ও বিজ্ঞাপন রোধ করে ব্রাউজিং নিরাপদ রাখে।", url: "https://www.avg.com/secure-browser", win: true, android: true, ios: true, linux: false },
       { name: "CCleaner Browser", category: "popular", logo: "https://cdn-uat.ccleaner.com/site/bfemltip/ccleaner_new_144x144.svg", engine: "Blink (Chromium)", desc: "একটি হালকা ও নিরাপদ ওয়েব ব্রাউজার, যাতে কম্পিউটারের অতিরিক্ত ক্যাশ ও আবর্জনা স্বয়ংক্রিয়ভাবে ক্লিন করার টুলস রয়েছে।", url: "https://www.ccleaner.com/ccleaner-browser", win: true, android: false, ios: false, linux: false },
-
+{ 
+    name: "Opera GX", 
+    category: "popular", 
+    logo: "https://images.seeklogo.com/logo-png/35/1/opera-gx-logo-png_seeklogo-354995.png", 
+    engine: "Blink (Chromium)", 
+    desc: "গেমারদের জন্য বিশেষভাবে তৈরি বিশ্বের প্রথম গেমিং ব্রাউজার। এতে রয়েছে সিপিইউ, র‍্যাম এবং নেটওয়ার্ক ব্যান্ডউইথ লিমিট করার বিশেষ গেমিং কন্ট্রোল প্যানেল।", 
+    url: "https://www.opera.com/gx", 
+    win: true, 
+    android: true, 
+    ios: true, 
+    linux: false 
+},
       // Category: Privacy
       { name: "Tor Browser", category: "privacy", logo: "https://img.alasofto.com/images/bKjR19M.png", engine: "Gecko (Firefox)", desc: "অনলাইন ট্র্যাকিং ও সেন্সরশিপ এড়ানোর শেষ কথা। এটি আপনার নেটওয়ার্ক ট্রাফিককে তিনটি আলাদা নোডে এনক্রিপ্ট করে নিরাপত্তা দেয়।", url: "https://www.torproject.org/", win: true, android: true, ios: false, linux: true },
       { name: "Mullvad Browser", category: "privacy", engine: "Gecko (Firefox)", desc: "টর টিমের সহায়তায় তৈরি করা হয়েছে। অনলাইন ট্র্যাকিং এড়াতে আপনার ডিজিটাল ফিঙ্গারপ্রিন্ট সম্পূর্ণ লুকিয়ে রাখে।", url: "https://mullvad.net/browser", win: true, android: false, ios: false, linux: true },
