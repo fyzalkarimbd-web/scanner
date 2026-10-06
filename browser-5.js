@@ -22,7 +22,7 @@ let activeBrowserCategory = 'all';
 { 
     name: "Opera GX", 
     category: "popular", 
-    logo: "https://images.seeklogo.com/logo-png/35/1/opera-gx-logo-png_seeklogo-354995.png", 
+    logo: "https://play-lh.googleusercontent.com/kxXK3ADh1qi3Rtad1StlXpSRAVlvZ27qaqZ4CIHcQ4YmU3sy54GVPQ2_g-eu6kd1xrZ4E2uINJaT_Jxu04iMEoo=w240-h480", 
     engine: "Blink (Chromium)", 
     desc: "গেমারদের জন্য বিশেষভাবে তৈরি বিশ্বের প্রথম গেমিং ব্রাউজার। এতে রয়েছে সিপিইউ, র‍্যাম এবং নেটওয়ার্ক ব্যান্ডউইথ লিমিট করার বিশেষ গেমিং কন্ট্রোল প্যানেল।", 
     url: "https://www.opera.com/gx", 
