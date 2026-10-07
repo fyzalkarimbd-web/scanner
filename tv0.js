@@ -17,7 +17,8 @@ let parsedChannels = [];
                 await loadIptvEngineScript('https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js');
             }
             const video = document.getElementById('iptvVideoPlayer');
-            if (video) { video.volume = 0.5; video.muted = false; }
+            // সরাসরি সাউন্ড 30% এ সেট করা এবং আনমিউট করা
+            if (video) { video.volume = 0.3; video.muted = false; } 
             const defaultServer = document.getElementById('dirServerSelect').value;
             fetchAndParseM3uPlaylist(defaultServer);
         } catch (err) {
@@ -156,34 +157,21 @@ let parsedChannels = [];
             hlsInstance.loadSource(streamUrl);
             hlsInstance.attachMedia(video);
             hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-                video.volume = 0.5;
-                video.muted = false;
+                video.volume = 0.3; // 30% Volume
+                video.muted = false; // Mute অফ করে দেওয়া হয়েছে
+                
+                // সরাসরি প্লে করার চেষ্টা করবে
                 video.play().catch(e => {
-                    video.muted = true;
-                    video.play().then(() => {
-                        const unmuteOnUserGesture = () => {
-                            video.muted = false; video.volume = 0.5;
-                            document.body.removeEventListener('click', unmuteOnUserGesture);
-                            document.body.removeEventListener('touchstart', unmuteOnUserGesture);
-                        };
-                        document.body.addEventListener('click', unmuteOnUserGesture);
-                        document.body.addEventListener('touchstart', unmuteOnUserGesture);
-                    });
+                    console.log("ব্রাউজার অটো-প্লে পলিসির কারণে ভিডিও সাউন্ডসহ প্লে হতে দিচ্ছে না!", e);
                 });
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = streamUrl; video.volume = 0.5; video.muted = false;
+            video.src = streamUrl; 
+            video.volume = 0.3; // 30% Volume
+            video.muted = false; // Mute অফ করে দেওয়া হয়েছে
             video.addEventListener('loadedmetadata', function() {
                 video.play().catch(e => {
-                    video.muted = true; video.play().then(() => {
-                        const unmuteOnSafariGesture = () => {
-                            video.muted = false; video.volume = 0.5;
-                            document.body.removeEventListener('click', unmuteOnSafariGesture);
-                            document.body.removeEventListener('touchstart', unmuteOnSafariGesture);
-                        };
-                        document.body.addEventListener('click', unmuteOnSafariGesture);
-                        document.body.addEventListener('touchstart', unmuteOnSafariGesture);
-                    });
+                    console.log("ব্রাউজার অটো-প্লে পলিসির কারণে ভিডিও সাউন্ডসহ প্লে হতে দিচ্ছে না!", e);
                 });
             });
         }
