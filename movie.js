@@ -5,6 +5,7 @@
     { name: "Filmy4wap", url: "https://filmtani.xyz/" },
     { name: "Filmyzilla", url: "https://www.filmyzilla71.com/" },
     { name: "FilmyFly", url: "https://filmyfly.army/" },
+    { name: "Daily Flim", url: "https://dailyflim.online/" },
     { name: "Jadoo Cinema BD", url: "https://jadoocinema.net/" },
     { name: "BollyFlix", url: "https://new.bollyflix.vote/" },
     { name: "Joya Move", url: "https://joya9tv1.com/" },
@@ -25,6 +26,7 @@
     { name: "8xfilms", url: "https://8xfilms.blog/" },
     { name: "11xmovies", url: "https://11xmovies.online/" },
     { name: "Vega Movies", url: "https://vegamoviess.io/" }
+
   ];
 
   // DOM পেজ পুরোপুরি লোড হওয়ার পর বাটনগুলো জেনারেট করার ফাংশন
