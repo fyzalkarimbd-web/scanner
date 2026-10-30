@@ -462,7 +462,7 @@
       vcRecordedChunks = [];
 
       document.getElementById('vcFileInput').value = '';
-      document.getElementById('vcFileName').innerText = 'ভিডিও ফাইল নির্বাচন করুন অথবা টেনে এনে ছেড়ে দিন (.mp4, .webm, .mov)';
+      document.getElementById('vcFileName').innerText = 'এখানে যেকোন ভিডিও আপলোড করুন!';
       
       document.getElementById('vcEmptyOriginal').style.display = 'block';
       document.getElementById('vcEmptyTransformed').style.display = 'block';
