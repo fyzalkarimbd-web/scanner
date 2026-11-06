@@ -25,7 +25,21 @@
     { name: "9xMovies", url: "https://9xmovies.watch/" },
     { name: "8xfilms", url: "https://8xfilms.blog/" },
     { name: "11xmovies", url: "https://11xmovies.online/" },
-    { name: "Vega Movies", url: "https://vegamoviess.io/" }
+    { name: "Vega Movies", url: "https://vegamoviess.io/" },
+   { name: "CTG Movies", url: "https://ctgmovies.com/" },
+{ name: "CINE FREAK", url: "https://cinefreak.net/" },
+{ name: "Candy BD", url: "http://candybd.net/" },
+{ name: "CINEMA BZ", url: "https://cinema.army/" },
+{ name: "Filmi", url: "https://filmi.unaux.com/" },
+{ name: "Filmi 18+", url: "https://18plusfilmi.unaux.com/" },
+{ name: "Flix Hub", url: "https://flixhub.net/" },
+{ name: "HDi Flix", url: "https://hdiflix.pw/" },
+{ name: "Movie Haat", url: "https://moviehaat.net/" },
+{ name: "Mymovie bazar", url: "https://mymoviebazar.net/" },
+{ name: "Movie Box", url: "https://movieboxhd.net/" },
+{ name: "Plex", url: "https://watch.plex.tv/" },
+{ name: "Movie wala", url: "https://moviewala.tv/" },
+{ name: "Fojik", url: "https://fojik.com/" }
 
   ];
 
