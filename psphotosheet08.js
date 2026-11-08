@@ -90,15 +90,23 @@
   }
 
 
-// --- নতুন আপডেট: ছবি রোটেট করার ফাংশন ---
+// --- নতুন আপডেট (সমাধানকৃত): শক্তিশালী ছবি রোটেট করার ফাংশন ---
 function rotatePsImage(index) {
-    // চেক করা হচ্ছে ওই লাইনে কোনো ছবি আপলোড করা আছে কিনা
-    if (!psImages[index]) {
+    // ১. প্রথমে আমরা সরাসরি DOM থেকে প্রিভিউ ইমেজ এলিমেন্টটি ধরব
+    const previewImgElement = document.getElementById(`prev${index + 1}`);
+    
+    // ২. চেক করব যে প্রিভিউ ইমেজে কোনো সোর্স (src) আছে কিনা এবং সেটি দৃশ্যমান কিনা
+    // যদি src খালি থাকে অথবা ডিসপ্লে 'none' থাকে, তার মানে ছবি আপলোড হয়নি
+    if (!previewImgElement || !previewImgElement.src || previewImgElement.style.display === 'none' || previewImgElement.src === window.location.href) {
         alert("Please upload a photo for this row first to rotate!");
         return;
     }
 
+    // বর্তমান ছবির সোর্স নেওয়া
+    const currentSrc = previewImgElement.src;
+
     const img = new Image();
+    // ছবি লোড হওয়ার পর ঘোরানোর কাজ শুরু হবে
     img.onload = function() {
         // একটি অফ-স্ক্রিন ক্যানভাস তৈরি করা
         const canvas = document.createElement('canvas');
@@ -114,20 +122,32 @@ function rotatePsImage(index) {
         ctx.drawImage(img, -img.width / 2, -img.height / 2);
 
         // নতুন ঘোরানো ছবির হাই-কোয়ালিটি ডেটা ইউআরএল তৈরি (JPEG ফরম্যাটে)
-        // আপনি চাইলে 'image/png' ব্যবহার করতে পারেন যদি ট্রান্সপারেন্সি দরকার হয়
         const rotatedDataURL = canvas.toDataURL('image/jpeg', 1.0);
 
-        // ১. গ্লোবাল অ্যারেতে নতুন ইমেজ ডেটা আপডেট করা
-        psImages[index] = rotatedDataURL;
+        // ৩. গুরুত্বপূর্ণ আপডেট: গ্লোবাল অ্যারে এবং প্রিভিউ দুটোই আপডেট করা
+        // যদি গ্লোবাল অ্যারেটি কোনো কারণে মিসিংও থাকে, তবুও এটি কাজ চালানোর চেষ্টা করবে
+        if (typeof psImages !== 'undefined' && Array.isArray(psImages)) {
+            psImages[index] = rotatedDataURL;
+        } else {
+             console.warn("Warning: psImages array not found globally. Print might fail.");
+        }
+
+        // বামপাশের থাম্বনেইল প্রিভিউ আপডেট করা
+        previewImgElement.src = rotatedDataURL;
         
-        // ২. বামপাশের থাম্বনেইল প্রিভিউ আপডেট করা
-        document.getElementById(`prev${index + 1}`).src = rotatedDataURL;
-        
-        // ৩. ডানপাশের মেইন A4 প্রিভিউ আপডেট করা
-        updatePsPreview();
+        // ডানপাশের মেইন A4 প্রিভিউ আপডেট করা
+        if (typeof updatePsPreview === 'function') {
+            updatePsPreview();
+        }
     };
-    // বর্তমান ছবিটি লোড করা শুরু
-    img.src = psImages[index];
+    
+    // কোনো কারণে ছবি লোড করতে সমস্যা হলে এরর হ্যান্ডলিং
+    img.onerror = function() {
+         alert("Error loading image for rotation. Please try re-uploading.");
+    };
+
+    // বর্তমান ছবিটি ক্যানভাসে লোড করার নির্দেশ
+    img.src = currentSrc;
 }
 // --- নতুন আপডেটের শেষ ---
 
