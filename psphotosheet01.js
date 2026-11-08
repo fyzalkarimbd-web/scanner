@@ -89,6 +89,48 @@
       }
   }
 
+
+// --- নতুন আপডেট: ছবি রোটেট করার ফাংশন ---
+function rotatePsImage(index) {
+    // চেক করা হচ্ছে ওই লাইনে কোনো ছবি আপলোড করা আছে কিনা
+    if (!psImages[index]) {
+        alert("Please upload a photo for this row first to rotate!");
+        return;
+    }
+
+    const img = new Image();
+    img.onload = function() {
+        // একটি অফ-স্ক্রিন ক্যানভাস তৈরি করা
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // ৯০ ডিগ্রি ঘোরানোর জন্য ক্যানভাসের দৈর্ঘ্য ও প্রস্থ অদল-বদল করা
+        canvas.width = img.height;
+        canvas.height = img.width;
+
+        // ক্যানভাসের কেন্দ্রে ট্রান্সলেট করে ৯০ ডিগ্রি ঘোরানো
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(90 * Math.PI / 180);
+        ctx.drawImage(img, -img.width / 2, -img.height / 2);
+
+        // নতুন ঘোরানো ছবির হাই-কোয়ালিটি ডেটা ইউআরএল তৈরি (JPEG ফরম্যাটে)
+        // আপনি চাইলে 'image/png' ব্যবহার করতে পারেন যদি ট্রান্সপারেন্সি দরকার হয়
+        const rotatedDataURL = canvas.toDataURL('image/jpeg', 1.0);
+
+        // ১. গ্লোবাল অ্যারেতে নতুন ইমেজ ডেটা আপডেট করা
+        psImages[index] = rotatedDataURL;
+        
+        // ২. বামপাশের থাম্বনেইল প্রিভিউ আপডেট করা
+        document.getElementById(`prev${index + 1}`).src = rotatedDataURL;
+        
+        // ৩. ডানপাশের মেইন A4 প্রিভিউ আপডেট করা
+        updatePsPreview();
+    };
+    // বর্তমান ছবিটি লোড করা শুরু
+    img.src = psImages[index];
+}
+// --- নতুন আপডেটের শেষ ---
+
   // আপনার নতুন কোড অনুযায়ী ফিজিক্যাল পেপার মার্জিন ও ইন্টার-ফটো গ্যাপ ক্যালকুলেশন ইঞ্জিন
   function getDynamicCoords() {
       const margin = 0.53; // ২ পিক্সেল ফিজিক্যাল মার্জিন (0.53mm)
