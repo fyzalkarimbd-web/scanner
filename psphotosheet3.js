@@ -1,3 +1,4 @@
+
 // ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে
   let psImages = [null, null, null, null, null, null, null, null, null, null];
 
@@ -32,8 +33,9 @@
           reader.onload = function(e) {
               psImages[index] = e.target.result;
               const idx = index + 1;
-              document.getElementById(`prev${idx}`).src = e.target.result;
-              document.getElementById(`prev${idx}`).style.display = 'block';
+              const prevImg = document.getElementById(`prev${idx}`);
+              prevImg.src = e.target.result;
+              prevImg.style.display = 'block';
               document.getElementById(`plus${idx}`).style.display = 'none';
               
               // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
@@ -57,16 +59,19 @@
       psImages[index] = null;
       const idx = index + 1;
       document.getElementById(`psInput${idx}`).value = '';
-      document.getElementById(`prev${idx}`).src = '';
-      document.getElementById(`prev${idx}`).style.display = 'none';
+      const prevImg = document.getElementById(`prev${idx}`);
+      prevImg.src = '';
+      prevImg.removeAttribute('src'); // src অ্যাট্রিবিউট সম্পূর্ণ মুছে ফেলা
+      prevImg.style.display = 'none';
       document.getElementById(`plus${idx}`).style.display = 'block';
       document.getElementById(`count${idx}`).value = 0;
       document.getElementById(`delBtn${idx}`).style.setProperty('display', 'none', 'important');
       updatePsPreview();
   }
 
-  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং (সংশোধিত বাগ-ফিক্স)
+  // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং
   function adjustPhotoCount(index, val) {
+      // কাউন্টার কাজ করার জন্যও নিশ্চিত হতে হবে যে ছবি আছে
       if (!psImages[index]) {
           alert("Please upload a photo for this row first!");
           return;
@@ -90,14 +95,16 @@
   }
 
 
-// --- নতুন আপডেট (সমাধানকৃত): শক্তিশালী ছবি রোটেট করার ফাংশন ---
+// --- নতুন আপডেট (১০০% ফিক্সড): শক্তিশালী ছবি রোটেট করার ফাংশন ---
 function rotatePsImage(index) {
     // ১. প্রথমে আমরা সরাসরি DOM থেকে প্রিভিউ ইমেজ এলিমেন্টটি ধরব
     const previewImgElement = document.getElementById(`prev${index + 1}`);
     
-    // ২. চেক করব যে প্রিভিউ ইমেজে কোনো সোর্স (src) আছে কিনা এবং সেটি দৃশ্যমান কিনা
-    // যদি src খালি থাকে অথবা ডিসপ্লে 'none' থাকে, তার মানে ছবি আপলোড হয়নি
-    if (!previewImgElement || !previewImgElement.src || previewImgElement.style.display === 'none' || previewImgElement.src === window.location.href) {
+    // ২. (ফিক্সড ভ্যালিডেশন): চেক করব যে প্রিভিউ ইমেজ এলিমেন্টটি আছে কিনা, 
+    // এটি দৃশ্যমান কিনা (display !== none), এবং সবচেয়ে গুরুত্বপূর্ণ - 
+    // এর সোর্সটি একটি আসল ছবির ডাটা (data:image/...) কিনা।
+    // যদি এর কোনোটি না মেলে, তার মানে ছবি সঠিকভাবে লোড হয়নি।
+    if (!previewImgElement || previewImgElement.style.display === 'none' || !previewImgElement.src || !previewImgElement.src.startsWith('data:image/')) {
         alert("Please upload a photo for this row first to rotate!");
         return;
     }
@@ -124,12 +131,9 @@ function rotatePsImage(index) {
         // নতুন ঘোরানো ছবির হাই-কোয়ালিটি ডেটা ইউআরএল তৈরি (JPEG ফরম্যাটে)
         const rotatedDataURL = canvas.toDataURL('image/jpeg', 1.0);
 
-        // ৩. গুরুত্বপূর্ণ আপডেট: গ্লোবাল অ্যারে এবং প্রিভিউ দুটোই আপডেট করা
-        // যদি গ্লোবাল অ্যারেটি কোনো কারণে মিসিংও থাকে, তবুও এটি কাজ চালানোর চেষ্টা করবে
+        // ৩. গ্লোবাল অ্যারে এবং প্রিভিউ দুটোই আপডেট করা
         if (typeof psImages !== 'undefined' && Array.isArray(psImages)) {
             psImages[index] = rotatedDataURL;
-        } else {
-             console.warn("Warning: psImages array not found globally. Print might fail.");
         }
 
         // বামপাশের থাম্বনেইল প্রিভিউ আপডেট করা
