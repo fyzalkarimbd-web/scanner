@@ -1,8 +1,13 @@
 
-// ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে
+  // ১০ জন ইউজারের ছবির সোর্স স্টোর করার জন্য গ্লোবাল অ্যারে
   let psImages = [null, null, null, null, null, null, null, null, null, null];
 
-  // ফিজিক্যাল রিয়েল সাইজ মিলিমিটারে (আপনার কোড থেকে সংগৃহীত)
+  // ▼▼▼ নতুন আপডেট: ১০টি ছবির ওরিয়েন্টেশন (লম্বা নাকি আড়াআড়ি) ট্র্যাক করার জন্য অ্যারে ▼▼▼
+  // true = ডিফল্ট (লম্বালম্বি/Portrait), false = ঘোরানো (আড়াআড়ি/Landscape)
+  let psIsPortrait = [true, true, true, true, true, true, true, true, true, true];
+  // ▲▲▲ নতুন আপডেটের শেষ ▲▲▲
+
+  // ফিজিক্যাল রিয়েল সাইজ মিলিমিটারে
   const PP_W = 38.1;  // ১.৫ ইঞ্চি (পাসপোর্ট সাইজ প্রস্থ)
   const PP_H = 48.26; // ১.৯ ইঞ্চি (পাসপোর্ট সাইজ উচ্চতা)
   const ST_W = 22.0;   // ২২ মিমি (স্ট্যাম্প সাইজ প্রস্থ)
@@ -32,17 +37,18 @@
           const reader = new FileReader();
           reader.onload = function(e) {
               psImages[index] = e.target.result;
+              // নতুন ছবি আপলোড হলে ওরিয়েন্টেশন রিসেট হবে
+              psIsPortrait[index] = true; 
+
               const idx = index + 1;
               const prevImg = document.getElementById(`prev${idx}`);
               prevImg.src = e.target.result;
               prevImg.style.display = 'block';
               document.getElementById(`plus${idx}`).style.display = 'none';
               
-              // ১-ক্লিক ডিলিট বাটনটি ভিজিবল করবে
               const delBtn = document.getElementById(`delBtn${idx}`);
               if (delBtn) delBtn.style.setProperty('display', 'flex', 'important');
               
-              // প্রথম ছবি আপলোডের পর ডিফল্ট ১ কপি সেট হবে
               const countInput = document.getElementById(`count${idx}`);
               if (parseInt(countInput.value) === 0) {
                   countInput.value = 1;
@@ -57,11 +63,15 @@
   // ছবি মুছে ফেলার লজিক
   function removePsImage(index) {
       psImages[index] = null;
+      // ▼▼▼ আপডেট: ছবি মুছলে ওরিয়েন্টেশন রিসেট হবে ▼▼▼
+      psIsPortrait[index] = true;
+      // ▲▲▲ আপডেট শেষ ▲▲▲
+
       const idx = index + 1;
       document.getElementById(`psInput${idx}`).value = '';
       const prevImg = document.getElementById(`prev${idx}`);
       prevImg.src = '';
-      prevImg.removeAttribute('src'); // src অ্যাট্রিবিউট সম্পূর্ণ মুছে ফেলা
+      prevImg.removeAttribute('src');
       prevImg.style.display = 'none';
       document.getElementById(`plus${idx}`).style.display = 'block';
       document.getElementById(`count${idx}`).value = 0;
@@ -71,7 +81,6 @@
 
   // কাস্টম প্লাস-মাইনাস কাউন্টার টিউনিং
   function adjustPhotoCount(index, val) {
-      // কাউন্টার কাজ করার জন্যও নিশ্চিত হতে হবে যে ছবি আছে
       if (!psImages[index]) {
           alert("Please upload a photo for this row first!");
           return;
@@ -84,10 +93,8 @@
       
       countInput.value = target;
       
-      // প্রিভিউ জেনারেট করবে এবং লিমিট রিচড স্ট্যাটাস চেক করবে
       const isOk = updatePsPreview();
       
-      // যদি পেপারের বাউন্ডারি ক্রস করে (isOk === false), তবে আগের ভ্যালু ফিরিয়ে আনবে
       if (isOk === false) {
           countInput.value = current;
           updatePsPreview();
@@ -95,88 +102,78 @@
   }
 
 
-// --- নতুন আপডেট (১০০% ফিক্সড): শক্তিশালী ছবি রোটেট করার ফাংশন ---
+// --- নতুন আপডেট: শক্তিশালী ছবি রোটেট করার ফাংশন ---
 function rotatePsImage(index) {
-    // ১. প্রথমে আমরা সরাসরি DOM থেকে প্রিভিউ ইমেজ এলিমেন্টটি ধরব
     const previewImgElement = document.getElementById(`prev${index + 1}`);
     
-    // ২. (ফিক্সড ভ্যালিডেশন): চেক করব যে প্রিভিউ ইমেজ এলিমেন্টটি আছে কিনা, 
-    // এটি দৃশ্যমান কিনা (display !== none), এবং সবচেয়ে গুরুত্বপূর্ণ - 
-    // এর সোর্সটি একটি আসল ছবির ডাটা (data:image/...) কিনা।
-    // যদি এর কোনোটি না মেলে, তার মানে ছবি সঠিকভাবে লোড হয়নি।
+    // ভ্যালিডেশন চেক
     if (!previewImgElement || previewImgElement.style.display === 'none' || !previewImgElement.src || !previewImgElement.src.startsWith('data:image/')) {
         alert("Please upload a photo for this row first to rotate!");
         return;
     }
 
-    // বর্তমান ছবির সোর্স নেওয়া
-    const currentSrc = previewImgElement.src;
+    // ▼▼▼ নতুন আপডেট: ওরিয়েন্টেশন স্টেট টগল (Toggle) করা ▼▼▼
+    // একবার ক্লিক করলে লম্বালম্বি থেকে আড়াআড়ি হবে, আবার ক্লিক করলে আগের অবস্থায় ফিরবে
+    psIsPortrait[index] = !psIsPortrait[index];
+    // ▲▲▲ নতুন আপডেটের শেষ ▲▲▲
 
+    const currentSrc = previewImgElement.src;
     const img = new Image();
-    // ছবি লোড হওয়ার পর ঘোরানোর কাজ শুরু হবে
+    
     img.onload = function() {
-        // একটি অফ-স্ক্রিন ক্যানভাস তৈরি করা
+        // থাম্বনেইল প্রিভিউয়ের জন্য ফিজিক্যাল রোটেশন (Canvas দিয়ে)
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        // ৯০ ডিগ্রি ঘোরানোর জন্য ক্যানভাসের দৈর্ঘ্য ও প্রস্থ অদল-বদল করা
         canvas.width = img.height;
         canvas.height = img.width;
 
-        // ক্যানভাসের কেন্দ্রে ট্রান্সলেট করে ৯০ ডিগ্রি ঘোরানো
         ctx.translate(canvas.width / 2, canvas.height / 2);
         ctx.rotate(90 * Math.PI / 180);
         ctx.drawImage(img, -img.width / 2, -img.height / 2);
 
-        // নতুন ঘোরানো ছবির হাই-কোয়ালিটি ডেটা ইউআরএল তৈরি (JPEG ফরম্যাটে)
         const rotatedDataURL = canvas.toDataURL('image/jpeg', 1.0);
 
-        // ৩. গ্লোবাল অ্যারে এবং প্রিভিউ দুটোই আপডেট করা
         if (typeof psImages !== 'undefined' && Array.isArray(psImages)) {
             psImages[index] = rotatedDataURL;
         }
 
-        // বামপাশের থাম্বনেইল প্রিভিউ আপডেট করা
         previewImgElement.src = rotatedDataURL;
         
-        // ডানপাশের মেইন A4 প্রিভিউ আপডেট করা
+        // মেইন A4 প্রিভিউ আপডেট
         if (typeof updatePsPreview === 'function') {
             updatePsPreview();
         }
     };
     
-    // কোনো কারণে ছবি লোড করতে সমস্যা হলে এরর হ্যান্ডলিং
     img.onerror = function() {
          alert("Error loading image for rotation. Please try re-uploading.");
     };
 
-    // বর্তমান ছবিটি ক্যানভাসে লোড করার নির্দেশ
     img.src = currentSrc;
 }
 // --- নতুন আপডেটের শেষ ---
 
-  // আপনার নতুন কোড অনুযায়ী ফিজিক্যাল পেপার মার্জিন ও ইন্টার-ফটো গ্যাপ ক্যালকুলেশন ইঞ্জিন
+  // ▼▼▼ গুরুত্বপূর্ণ আপডেট: ডাইনামিক কো-অর্ডিনেট ক্যালকুলেশন ফাংশনে পরিবর্তন ▼▼▼
   function getDynamicCoords() {
-      const margin = 0.53; // ২ পিক্সেল ফিজিক্যাল মার্জিন (0.53mm)
+      const margin = 0.53; 
       let currentY = margin;
-      const hGap = 2.5;    // হরাইজন্টাল গ্যাপ (2.5mm)
-      const vGap = 3.5;    // ভার্টিকাল গ্যাপ (3.5mm)
+      const hGap = 2.5;    
+      const vGap = 3.5;    
       
       let coords = [];
       let limitReached = false;
       let currentX = margin;
       let rowMaxH = 0;
 
-      // ১০ জন ইউজারের ডাটা চেক করে ডাইনামিকালি সাজাবে
       for (let i = 0; i < 10; i++) {
           const img = psImages[i];
           const count = parseInt(document.getElementById(`count${i+1}`).value) || 0;
           const size = document.getElementById(`size${i+1}`).value;
           
           if (img && count > 0) {
-              // সাইজ ম্যাপিং
-              let w = PP_W;
-              let h = PP_H; // পাসপোর্ট সাইজ
+              // ডিফল্ট সাইজ ম্যাপিং (লম্বালম্বি অবস্থা)
+              let w = PP_W; let h = PP_H; // Passport
               
               if (size === 'stamp') {
                   w = ST_W; h = ST_H;
@@ -184,15 +181,24 @@ function rotatePsImage(index) {
                   w = JP_W; h = JP_H;
               }
 
+              // ▼▼▼ এখানে আসল পরিবর্তন: যদি ছবিটি রোটেট করা হয়ে থাকে (psIsPortrait false হয়),
+              // তবে এর প্রস্থ (w) এবং উচ্চতা (h) অদল-বদল করে দেওয়া হবে। ▼▼▼
+              if (psIsPortrait[i] === false) {
+                  const tempW = w;
+                  w = h;
+                  h = tempW;
+                  // এখন w হবে বড়, h হবে ছোট -> অর্থাৎ ছবিটি আড়াআড়ি হয়ে যাবে।
+              }
+              // ▲▲▲ পরিবর্তন শেষ ▲▲▲
+
               for (let j = 0; j < count; j++) {
-                  // চেক করবে হরাইজন্টালি এ৪ পেপারের চওড়া লিমিট (২১০ মিমি) ক্রস করে কিনা
+                  // পেপার লিমিট চেক
                   if (currentX + w > 210 - margin) {
-                      currentY += (rowMaxH + vGap); // নতুন লাইনে যাবে
+                      currentY += (rowMaxH + vGap); 
                       currentX = margin;
                       rowMaxH = 0;
                   }
 
-                  // চেক করবে ভার্টিকালি এ৪ পেপারের দৈর্ঘ্য লিমিট (২৯৭ মিমি) ক্রস করে কিনা
                   if (currentY + h > 297 - margin) {
                       limitReached = true;
                       break;
@@ -200,15 +206,16 @@ function rotatePsImage(index) {
 
                   coords.push({ w: w, h: h, x: currentX, y: currentY, img: img });
                   rowMaxH = Math.max(rowMaxH, h);
-                  currentX += (w + hGap); // পরবর্তী ছবির জন্য এক্স পজিশন বাড়াবে
+                  currentX += (w + hGap);
               }
               if (limitReached) break;
           }
       }
       return { coords, limitReached };
   }
+  // ▲▲▲ গুরুত্বপূর্ণ আপডেটের শেষ ▲▲▲
 
-  // লাইভ এ৪ প্রিভিউ জেনারেটর (১ পিক্সেলের চেয়েও চিকন ০.৫ পিক্সেল বর্ডার সহ) [1.1.2]
+  // লাইভ এ৪ প্রিভিউ জেনারেটর
   function updatePsPreview() {
       const previewArea = document.getElementById('a4-preview-area');
       const result = getDynamicCoords();
@@ -217,18 +224,15 @@ function rotatePsImage(index) {
       document.getElementById('limitWarning').style.display = result.limitReached ? 'block' : 'none';
       document.getElementById('footerNote').style.display = result.limitReached ? 'block' : 'none';
 
-      previewArea.innerHTML = ''; // ক্লিয়ার করবে
+      previewArea.innerHTML = ''; 
       
       if(coords.length === 0) {
           previewArea.innerHTML = '<p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #94a3b8; font-size: 12px; font-weight: 700;">No Image Selected</p>';
-          return true; // মডাল ক্লিয়ার থাকলে ট্রু রিটার্ন করবে
+          return true; 
       }
 
-      // এ৪ প্রিভিউ এরিয়ার উইডথ অনুযায়ী স্কেল রেশিও নির্ধারণ
       const scale = previewArea.clientWidth / 210; 
       const showBorder = document.getElementById('psBorder').checked;
-      
-      // ছবির চারপাশের বর্ডারটি স্ক্রিনে একদম চিকন দেখতে ০.৫ পিক্সেল সেট করা হয়েছে [1.1.2]
       const borderStyle = showBorder ? '0.5px solid #000000' : 'none';
 
       coords.forEach(p => {
@@ -246,11 +250,10 @@ function rotatePsImage(index) {
           previewArea.appendChild(div);
       });
 
-      // লিমিট রিচড হয়ে থাকলে false রিটার্ন করবে, অন্যথায় true (সংশোধিত বাগ-ফিক্স)
       return !result.limitReached; 
   }
 
-  // A4 ভেক্টর পিডিএফ জেনারেশন (১০০% অরিজিনাল কোয়ালিটি ও একদম চিকন বর্ডার সহ) [1.1.2]
+  // A4 ভেক্টর পিডিএফ জেনারেশন
   async function generatePhotoSheetPDF() {
       const { jsPDF } = window.jspdf;
       const { coords } = getDynamicCoords();
@@ -262,24 +265,21 @@ function rotatePsImage(index) {
       const statusEl = document.getElementById('payslipGeneratorStatus') || document.createElement('div');
       statusEl.innerText = "Generating 100% original high-definition PDF...";
       
-      // ডিরেক্ট ভেক্টর মেথড: html2canvas স্ক্রিনশট বাদ দিয়ে সরাসরি মূল ইমেজ ডাটা পিডিএফে এম্বেড করা হবে [1.1.2]
       const pdf = new jsPDF('p', 'mm', 'a4');
       const showBorder = document.getElementById('psBorder').checked;
 
       coords.forEach(p => {
-          // ইমেজের জেনুইন ফরম্যাট ডিটেক্ট করবে (PNG নাকি JPEG) [1.1.2]
           let imgFormat = 'JPEG';
           if (p.img.startsWith('data:image/png')) {
               imgFormat = 'PNG';
           }
 
-          // মূল আপলোড করা হাই-রেজোলিউশন ইমেজটি সরাসরি পিডিএফে অ্যাড করবে (কোয়ালিটি লস হবে না) [1.1.2]
+          // এখানেও p.w এবং p.h আপডেটেড ভ্যালু পাবে, তাই পিডিএফ-এও ছবি আড়াআড়ি হবে
           pdf.addImage(p.img, imgFormat, p.x, p.y, p.w, p.h, undefined, 'FAST');
           
           if(showBorder) {
-              // পিডিএফ বর্ডারটি একদম সুতোর মতো চিকন করতে লাইন উইডথ 0.05mm করা হয়েছে [1.1.2]
-              pdf.setDrawColor(0, 0, 0); // কুচকুচে কালো রঙের বর্ডার লাইন
-              pdf.setLineWidth(0.05);    // চরম চিকন হেয়ারলাইন বর্ডার [1.1.2]
+              pdf.setDrawColor(0, 0, 0); 
+              pdf.setLineWidth(0.05);    
               pdf.rect(p.x, p.y, p.w, p.h);
           }
       });
@@ -300,6 +300,7 @@ function rotatePsImage(index) {
       const borderCss = showBorder ? 'border: 0.1mm solid #ccc; border-radius: 0px !important;' : 'border: none !important;';
 
       coords.forEach(p => {
+          // এখানেও ডাইরেক্ট প্রিন্টে ছবি আড়াআড়িভাবে আসবে
           printWindow.document.write(`<div style="position: absolute; left: ${p.x}mm; top: ${p.y}mm; width: ${p.w}mm; height: ${p.h}mm; ${borderCss}"><img src="${p.img}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>`);
       });
       printWindow.document.write('</body></html>');
