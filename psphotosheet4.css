@@ -1,0 +1,321 @@
+ /* ১. মেইন কন্টেইনার এবং গ্রিড সেটিংস */
+  #grid-page-unit {
+    width: 210mm;
+    height: 297mm; 
+    background: #ffffff !important;
+    margin: 0 auto;
+    padding: 5px; 
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden; 
+    display: block;
+    clear: both;
+  }
+
+  /* ছবির বর্ডার এবং ডিজাইন */
+  .grid-photo-item {
+    background: #f8fafc;
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    align-self: flex-start !important; /* স্ট্যাম্প ছবির ফ্লেক্স স্ট্রেচিং বাগ-ফিক্স */
+  }
+  .grid-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* কাউন্টার বক্স */
+  .counter-box { 
+    display: flex; 
+    align-items: center; 
+    background: #fff; 
+    border: 1.5px solid #cbd5e1; 
+    border-radius: 8px; 
+    overflow: hidden; 
+  }
+  .counter-box button { 
+    padding: 8px 12px; 
+    background: #f1f5f9; 
+    border: none; 
+    cursor: pointer; 
+    font-weight: 900; 
+    font-size: 16px;
+    transition: 0.2s;
+    color: #4f46e5;
+  }
+  .counter-box button:hover { background: #4f46e5; color: #fff; }
+  .counter-box input { 
+    width: 35px; 
+    text-align: center; 
+    border: none; 
+    font-weight: 800; 
+    font-size: 14.5px;
+    background: transparent; 
+    outline: none; 
+  }
+
+  /* প্রিন্টিং ইন্সট্রাকশন বক্স */
+  .print-instruction-box {
+    margin-top: 25px;
+    padding: 15px 20px;
+    background: #f0f9ff;
+    border: 1px dashed #3b82f6;
+    border-radius: 12px;
+    text-align: left;
+    color: #1e40af;
+    line-height: 1.6;
+  }
+  .print-instruction-box strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #1d4ed8;
+  }
+  .print-instruction-box ul { margin: 0; padding-left: 20px; }
+  .print-instruction-box li { font-size: 13px; margin-bottom: 5px; font-weight: 500; }
+
+  /* ১০টি রো এর জন্য স্ক্রোল কন্টেইনার সেটিংস (NEW UPDATE) */
+  #psInputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 380px; /* ডেক্সটপে পারফেক্ট স্ক্রোল হাইট */
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 #f1f5f9;
+  }
+  /* ওয়েবকিট ব্রাউজার স্ক্রোলবার */
+  #psInputContainer::-webkit-scrollbar {
+    width: 5px;
+  }
+  #psInputContainer::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+  #psInputContainer::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 10px;
+  }
+
+  /* --- প্রফেশনাল মোবাইল ফ্রেন্ডলি সিএসএস (১০০% পারফেক্ট ভিউ) --- */
+  @media (max-width: 850px) {
+    #grid-scroll-wrapper { 
+        width: 100%;
+        height: auto; 
+        min-height: 450px;
+        max-height: 550px; 
+        overflow: hidden;
+        background: #1e293b; 
+        padding: 15px 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    /* পেজ স্কেলিং লজিক */
+    #grid-page-unit { 
+        width: 210mm !important; 
+        position: relative;
+        transform: scale(0.42); 
+        transform-origin: top center;
+        margin: 0 auto;
+        margin-bottom: -165mm; 
+        box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+        z-index: 1;
+    }
+
+    .sheet-pro-toolbar {
+        padding: 10px;
+        gap: 8px;
+        border-radius: 0;
+    }
+    .toolbar-row {
+        gap: 5px !important;
+        justify-content: space-around;
+    }
+
+    .toolbar-row select, 
+    .toolbar-row button, 
+    .counter-box {
+        font-size: 11px !important;
+        padding: 7px 5px !important;
+        height: 35px !important;
+    }
+    .counter-box input {
+        width: 25px !important;
+        font-size: 12px !important;
+    }
+
+    .actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px;
+        margin-top: 15px;
+        padding: 0 10px;
+    }
+    .actions button {
+        width: 100%;
+        padding: 14px !important;
+        font-size: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    .print-instruction-box { 
+        padding: 12px; 
+        margin: 20px 10px; 
+        border-radius: 12px;
+        font-size: 11px;
+    }
+    #psInputContainer {
+        max-height: 340px; /* মোবাইলে স্ক্রোল সাইজ কিছুটা ছোট হবে */
+    }
+  }
+
+  @media (max-width: 390px) {
+    #grid-page-unit { 
+        transform: scale(0.36); 
+        margin-bottom: -180mm;
+    }
+  }
+
+  /* --- প্রফেশনাল মোবাইল ফ্রেন্ডলি সিএসএস (১০০% পারফেক্ট ভিউ) --- */
+@media (max-width: 850px) {
+    /* ১. মডাল কন্টেইনার এবং মূল গ্রিড লেআউট */
+    .crop-modal-content {
+        width: 95% !important;
+        margin: 2% auto !important;
+        max-height: 96vh !important;
+        overflow-y: auto !important;
+    }
+    
+    .cp-box {
+        padding: 15px !important;
+        border-radius: 15px !important;
+    }
+
+    /* মূল গ্রিডকে এক কলামে ভেঙে ফেলা */
+    #layout-grid-wrap {
+        grid-template-columns: 1fr !important; /* পাশাপাশি থেকে নিচে নিচে আসবে */
+        gap: 25px !important;
+    }
+
+    /* ২. বাম পাশের ফর্ম সেকশন (Upload & Controls) */
+    #layout-grid-wrap > div:first-child {
+        order: 2; /* ফর্মটি মোবাইলে প্রিভিউয়ের নিচে চলে যাবে */
+    }
+
+    /* স্ক্রল কন্টেইনারের উচ্চতা বাড়ানো */
+    #psInputContainer {
+        max-height: 300px !important;
+    }
+
+    /* প্রতিটি রো-এর ভেতরের উপাদানগুলো সাজানো */
+    .ps-person-row {
+        padding: 10px !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important; /* জায়গা না হলে ভেঙে নিচে নামবে */
+    }
+    
+    /* ক্রমিক নম্বর এবং আপলোড বক্স */
+    .ps-person-row > span:first-child,
+    .ps-person-row > div:nth-child(2) {
+        flex-shrink: 0 !important;
+    }
+
+    /* সাইজ সিলেক্ট ড্রপডাউন */
+    .ps-person-row > div:nth-child(3) {
+        flex: 1 1 120px !important; /* নমনীয় হবে, তবে অন্তত ১২০ পিক্সেল জায়গা নেবে */
+        min-width: 120px !important;
+    }
+    
+    /* কাউন্টার বক্স (প্লাস-মাইনাস-রোটেট) */
+    .counter-box {
+        flex: 1 1 auto !important;
+        min-width: 110px !important;
+        justify-content: center !important;
+    }
+    
+    /* কাউন্টার বক্সের বাটন এবং ইনপুট ছোট করা */
+    .counter-box button {
+        padding: 6px 8px !important;
+        font-size: 14px !important;
+    }
+    .counter-box input {
+        width: 28px !important;
+        font-size: 13px !important;
+    }
+
+    /* ডিলিট বাটন */
+    .ps-del-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 12px !important;
+        margin-left: auto !important; /* একদম ডানপাশে ঠেলে দেবে */
+    }
+
+    /* ৩. ডান পাশের প্রিভিউ সেকশন (Live A4 Preview) */
+    #layout-grid-wrap > div:last-child {
+        order: 1; /* প্রিভিউটি মোবাইলে সবার উপরে থাকবে */
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 10 !important;
+        background: #f1f5f9 !important;
+        padding-bottom: 15px !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
+    }
+
+    /* A4 প্রিভিউ এরিয়ার সাইজ */
+    #a4-preview-area {
+        max-width: 300px !important; /* মোবাইলে খুব বেশি বড় হবে না */
+        margin: 0 auto !important;
+    }
+
+    /* ৪. নিচের অ্যাকশন বাটন এবং সেটিংস */
+    #psActionBtns {
+        flex-direction: column !important; /* বাটনগুলো নিচে নিচে আসবে */
+        gap: 10px !important;
+    }
+    #psActionBtns button {
+        padding: 14px !important;
+        font-size: 15px !important;
+    }
+    
+    /* বর্ডার চেকবক্স এবং ওয়ার্নিং মেসেজ */
+    .cp-box > div:last-child > div:first-child {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 10px !important;
+    }
+    #limitWarning {
+        font-size: 12px !important;
+        margin-top: 5px !important;
+    }
+}
+
+/* আরো ছোট স্ক্রিনের জন্য (যেমন: iPhone SE, পুরোনো অ্যান্ড্রয়েড) */
+@media (max-width: 390px) {
+    .ps-person-row {
+        gap: 5px !important;
+    }
+    .ps-person-row > div:nth-child(3), /* সাইজ সিলেক্ট */
+    .counter-box {
+        flex: 1 1 100% !important; /* পুরো লাইন জুড়ে থাকবে */
+        margin-top: 5px !important;
+    }
+    .counter-box {
+        justify-content: space-between !important;
+        width: 100% !important;
+    }
+}
