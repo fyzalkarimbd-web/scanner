@@ -191,12 +191,7 @@
   /* --- প্রফেশনাল মোবাইল ফ্রেন্ডলি সিএসএস (১০০% পারফেক্ট ভিউ) --- */
 @media (max-width: 850px) {
     /* ১. মডাল কন্টেইনার এবং মূল গ্রিড লেআউট */
-    .crop-modal-content {
-        width: 95% !important;
-        margin: 2% auto !important;
-        max-height: 96vh !important;
-        overflow-y: auto !important;
-    }
+
     
     .cp-box {
         padding: 15px !important;
