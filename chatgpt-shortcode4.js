@@ -412,7 +412,7 @@
     { code: "/MasterpieceQuality", bn: "সর্বোচ্চ মানের শিল্পসম্মত আউটপুট।", cat: "adv" }
   ];
 
-  // ----------------- FAVORITES LOCAL STORAGE ENGINE (NEW UPDATE) -----------------
+  // ----------------- FAVORITES LOCAL STORAGE ENGINE -----------------
   function getFavorites() {
     try {
       const favs = localStorage.getItem('cgpt_fav_shortcodes');
@@ -427,31 +427,42 @@
     return favs.includes(code);
   }
 
-  function toggleFavorite(code, starEl, event) {
-    if (event) event.stopPropagation();
+  // স্টার আইকন ক্লিক ফিক্সড ফাংশন (BUG FIXED)
+  function handleStarFavClick(starEl, encodedCode, event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    const code = decodeURIComponent(encodedCode);
     let favs = getFavorites();
+    
     if (favs.includes(code)) {
       favs = favs.filter(c => c !== code);
-      if (starEl) {
-        starEl.className = 'fa-regular fa-star sc-fav-star';
-      }
     } else {
       favs.push(code);
-      if (starEl) {
-        starEl.className = 'fa-solid fa-star sc-fav-star active';
-      }
     }
+    
     try {
       localStorage.setItem('cgpt_fav_shortcodes', JSON.stringify(favs));
     } catch (e) {}
 
-    // যদি বর্তমানে ফেভারিট ট্যাবে থাকে, তবে রেন্ডার রিফ্রেশ করবে
+    // রি-রেন্ডার করবে যাতে স্টার স্টেট তাৎক্ষণিকভাবে নিখুঁত আপডেট হয়
+    renderShortcodes();
+  }
+
+  // প্রিয় তালিকা বাটন টগল লজিক (NEW UPDATE)
+  function toggleFavFilter() {
+    const btn = document.getElementById('scFavFilterBtn');
     if (currentCategory === 'fav') {
-      renderShortcodes();
+      switchCategory('all', '🔥 সব শর্টকোড');
+      if (btn) btn.classList.remove('active');
+    } else {
+      switchCategory('fav', '⭐ প্রিয় শর্টকোড');
+      if (btn) btn.classList.add('active');
     }
   }
 
-  // ১. সুইচার ক্যাটাগরি লজিক (NEW UPDATE)
+  // ১. সুইচার ক্যাটাগরি লজিক
   function switchCategory(catId, catLabel) {
     currentCategory = catId;
     
@@ -461,10 +472,13 @@
       selectedTextEl.innerText = catLabel;
     }
 
-    // ড্রপডাউন মেনু আইটেমগুলোর অ্যাক্টিভ স্টেট সিঙ্ক করবে
-    const items = document.querySelectorAll('.sc-menu-item');
-    items.forEach(item => item.classList.remove('active'));
-    
+    // ফেভারিট ফিল্টার বাটন স্টেট সিঙ্ক
+    const favBtn = document.getElementById('scFavFilterBtn');
+    if (favBtn) {
+      if (catId === 'fav') favBtn.classList.add('active');
+      else favBtn.classList.remove('active');
+    }
+
     // পপ-আপ বন্ধ করবে
     hideCategoryMenu();
 
@@ -474,7 +488,7 @@
     renderShortcodes();
   }
 
-  // ২. শর্টকোড গ্রিড রেন্ডারার (Favorites & Light Theme Support)
+  // ২. শর্টকোড গ্রিড রেন্ডারার
   function renderShortcodes() {
     const grid = document.getElementById('scGrid');
     if (!grid) return;
@@ -496,7 +510,7 @@
 
     if (filtered.length === 0) {
       if (currentCategory === 'fav' && !query) {
-        grid.innerHTML = '<div style="color: #64748b; padding: 40px; text-align: center; grid-column: 1/-1;">আপনার কোনো পছন্দের শর্টকোড সেভ করা নেই। শর্টকোডের ডানপাশের স্টার (⭐) আইকনে চাপ দিয়ে ফেভারিট করুন!</div>';
+        grid.innerHTML = '<div style="color: #64748b; padding: 40px; text-align: center; grid-column: 1/-1;"><i class="fa-solid fa-star" style="font-size: 28px; color: #f59e0b; margin-bottom: 8px; display: block;"></i>আপনার কোনো পছন্দের শর্টকোড সেভ করা নেই। শর্টকোডের ডানপাশের স্টার (⭐) আইকনে চাপ দিয়ে প্রিয় তালিকায় যুক্ত করুন!</div>';
       } else {
         grid.innerHTML = '<div style="color: #64748b; padding: 40px; text-align: center; grid-column: 1/-1;">কোনো শর্টকোড খুঁজে পাওয়া যায়নি। অনুগ্রহ করে অন্য নাম লিখে সার্চ করুন।</div>';
       }
@@ -507,9 +521,10 @@
       const card = document.createElement('div');
       card.className = `sc-card ${item.isTrend ? 'trending' : ''}`;
       const favActive = isFavorite(item.code);
+      const encodedCode = encodeURIComponent(item.code);
 
       card.innerHTML = `
-        <i class="${favActive ? 'fa-solid fa-star sc-fav-star active' : 'fa-regular fa-star sc-fav-star'}" title="ফেভারিট করুন" onclick="toggleFavorite('${item.code}', this, event)"></i>
+        <i class="${favActive ? 'fa-solid fa-star sc-fav-star active' : 'fa-regular fa-star sc-fav-star'}" title="ফেভারিট করুন" onclick="handleStarFavClick(this, '${encodedCode}', event)"></i>
         <div>
           <span class="sc-code-tag">${item.code}</span>
           <div class="sc-desc-bn">${item.bn}</div>
