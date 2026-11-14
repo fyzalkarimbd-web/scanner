@@ -524,13 +524,13 @@
       const encodedCode = encodeURIComponent(item.code);
 
       card.innerHTML = `
-        <i class="${favActive ? 'fa-solid fa-star sc-fav-star active' : 'fa-regular fa-star sc-fav-star'}" title="ফেভারিট করুন" onclick="handleStarFavClick(this, '${encodedCode}', event)"></i>
+        <i class="${favActive ? 'fa-solid fa-star sc-fav-star active' : 'fa-regular fa-star sc-fav-star'}" title="ফেভারিট করুন!" onclick="handleStarFavClick(this, '${encodedCode}', event)"></i>
         <div>
           <span class="sc-code-tag">${item.code}</span>
           <div class="sc-desc-bn">${item.bn}</div>
         </div>
         <button class="sc-copy-btn" onclick="copyShortcode('${item.code}', this)">
-          <i class="fa-regular fa-copy"></i> কপি করুন
+          <i class="fa-regular fa-copy"></i> কপি করুন!
         </button>
       `;
       grid.appendChild(card);
