@@ -1,4 +1,21 @@
+// ChatGPT শর্টকোড মাস্টার মোডাল অ্যাক্টিভেশন (সিলেক্টিভ ও ওপেনিং লজিক)
+  function openCgptShortcodeModal() {
+      if (typeof setActiveMode === 'function') setActiveMode('mode-chatgpt-shortcode'); // বাটন সিলেক্ট করবে
+      const modal = document.getElementById('cgptShortcodeModal');
+      if (modal) {
+          modal.style.display = 'flex'; // মোডাল ওপেন করবে
+          document.body.style.overflow = 'hidden'; // ব্যাকগ্রাউন্ড স্ক্রোল লক করবে [1.1.2]
+      }
+      if (typeof renderShortcodes === 'function') renderShortcodes(); // শর্টকোড রেন্ডার করবে
+  }
 
+  function closeCgptShortcodeModal() {
+      const modal = document.getElementById('cgptShortcodeModal');
+      if (modal) {
+          modal.style.display = 'none'; // মোডাল ক্লোজ করবে
+          document.body.style.overflow = ''; // ব্যাকগ্রাউন্ড স্ক্রোল সচল করবে [1.1.2]
+      }
+  }
   let currentCategory = 'all';
 
   // Master Dataset (500+ Shortcodes + Trending Angles)
