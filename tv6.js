@@ -1,4 +1,5 @@
-let parsedChannels = [];
+
+    let parsedChannels = [];
     let hlsInstance = null;
 
     function loadIptvEngineScript(url) {
@@ -17,7 +18,6 @@ let parsedChannels = [];
                 await loadIptvEngineScript('https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js');
             }
             const video = document.getElementById('iptvVideoPlayer');
-            // সরাসরি সাউন্ড 30% এ সেট করা এবং আনমিউট করা
             if (video) { video.volume = 0.3; video.muted = false; } 
             const defaultServer = document.getElementById('dirServerSelect').value;
             fetchAndParseM3uPlaylist(defaultServer);
@@ -179,8 +179,12 @@ let parsedChannels = [];
 
     function autoPlayInitialChannel() {
         if (parsedChannels.length === 0) return;
-        let initialChannelIdx = parsedChannels.findIndex(chan => chan.name.toLowerCase().includes("NTV") || chan.name.toLowerCase().includes("NTV"));
+        // NTV এর বদলে Channel I অথবা Channel-I খুঁজবে
+        let initialChannelIdx = parsedChannels.findIndex(chan => chan.name.toLowerCase().includes("channel i") || chan.name.toLowerCase().includes("channel-i"));
+        
+        // যদি Channel I না পাওয়া যায়, তবে একদম প্রথম চ্যানেলটি প্লে করবে
         if (initialChannelIdx === -1) initialChannelIdx = 0;
+        
         const targetChannel = parsedChannels[initialChannelIdx];
         const channelButtons = document.querySelectorAll('.channel-btn');
         const targetBtn = channelButtons[initialChannelIdx] || null;
@@ -198,3 +202,4 @@ let parsedChannels = [];
         });
         renderChannelItemsGrid(filtered);
     }
+<!-- Progressive HLS Streaming Engine & Playlist Parser END -->
