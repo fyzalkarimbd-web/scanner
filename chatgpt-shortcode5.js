@@ -570,7 +570,7 @@
 
   // কপি বাটন এনিমেশন
   function showCopySuccess(btnEl) {
-    const originalHTML = '<i class="fa-regular fa-copy"></i> কপি করুন';
+    const originalHTML = '<i class="fa-regular fa-copy"></i> কপি করুন!';
     btnEl.innerHTML = '<i class="fa-solid fa-check"></i> কপি হয়েছে!';
     btnEl.classList.add('copied');
 
