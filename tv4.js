@@ -179,7 +179,7 @@ let parsedChannels = [];
 
     function autoPlayInitialChannel() {
         if (parsedChannels.length === 0) return;
-        let initialChannelIdx = parsedChannels.findIndex(chan => chan.name.toLowerCase().includes("ChannelI") || chan.name.toLowerCase().includes("ChannelI"));
+        let initialChannelIdx = parsedChannels.findIndex(chan => chan.name.toLowerCase().includes("Channel") || chan.name.toLowerCase().includes("Channel"));
         if (initialChannelIdx === -1) initialChannelIdx = 0;
         const targetChannel = parsedChannels[initialChannelIdx];
         const channelButtons = document.querySelectorAll('.channel-btn');
