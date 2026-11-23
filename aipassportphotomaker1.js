@@ -1,3 +1,38 @@
+// মোডাল অ্যাক্টিভেশন ও ক্লোজিং হ্যান্ডেলার
+  function openAiPassportPhotoMakerModal() {
+      if (typeof setActiveMode === 'function') setActiveMode('mode-ai-passport-maker');
+      const modal = document.getElementById('aiPassportPhotoMakerModal');
+      if (modal) {
+          modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden'; // ব্যাকগ্রাউন্ড স্ক্রোল লক [1.1.2]
+      }
+  }
+
+  function closeAiPassportPhotoMakerModal() {
+      const modal = document.getElementById('aiPassportPhotoMakerModal');
+      if (modal) {
+          modal.style.display = 'none';
+          document.body.style.overflow = ''; // ব্যাকগ্রাউন্ড স্ক্রোল সচল [1.1.2]
+          
+          // ভিডিও এবং বাটনের টেক্সট রিসেট লজিক (NEW UPDATE)
+          const sec = document.getElementById('aipVideoSection');
+          const iframe = document.getElementById('aipTutorialIframe');
+          const btn = document.getElementById('aipVideoTriggerBtn');
+
+          if (sec && sec.style.display !== 'none') {
+              sec.style.display = 'none';
+              if (iframe) iframe.src = 'about:blank'; // ভিডিও বন্ধ করবে
+              isAipVideoLoaded = false;
+          }
+
+          // বাটন টেক্সট ও লাল কালার আগের অবস্থায় রিসেট করবে (NEW UPDATE)
+          if (btn) {
+              btn.innerHTML = '<i class="fa-brands fa-youtube"></i> <span>কিভাবে করবেন ভিডিও দেখুন!</span>';
+              btn.style.background = 'linear-gradient(135deg, #cc0000, #ff0000)';
+          }
+      }
+  }
+
 // আপনার অফিশিয়াল প্রম্পট
   const aiPassportPrompt = `From any photo of any size or head position, create a passport-style front-facing headshot. The face shape, proportions, and features should not be altered in any way — not even slightly. Just adjust the head position so that the person is looking directly at the camera. Keep the natural face exactly as it is. Lighten the skin evenly all over to keep it realistic. Remove any acne, blemishes, or spots from the skin and maintain natural texture. Remove all shadows, harsh lights, or reflections to ensure even, balanced lighting. Keep the original clothing color but the clothing will look clean and new. Use a white background with no shadows. The photo should be high resolution, with the head occupying 70-80% of the frame, perfectly centered, and vertically aligned. Automatically crop the photo to standard passport size (2x2 inches / 600x600 px).`;
 
@@ -77,37 +112,4 @@
       }
   }
 
-  // মোডাল অ্যাক্টিভেশন ও ক্লোজিং হ্যান্ডেলার
-  function openAiPassportPhotoMakerModal() {
-      if (typeof setActiveMode === 'function') setActiveMode('mode-ai-passport-maker');
-      const modal = document.getElementById('aiPassportPhotoMakerModal');
-      if (modal) {
-          modal.style.display = 'flex';
-          document.body.style.overflow = 'hidden'; // ব্যাকগ্রাউন্ড স্ক্রোল লক [1.1.2]
-      }
-  }
-
-  function closeAiPassportPhotoMakerModal() {
-      const modal = document.getElementById('aiPassportPhotoMakerModal');
-      if (modal) {
-          modal.style.display = 'none';
-          document.body.style.overflow = ''; // ব্যাকগ্রাউন্ড স্ক্রোল সচল [1.1.2]
-          
-          // ভিডিও এবং বাটনের টেক্সট রিসেট লজিক (NEW UPDATE)
-          const sec = document.getElementById('aipVideoSection');
-          const iframe = document.getElementById('aipTutorialIframe');
-          const btn = document.getElementById('aipVideoTriggerBtn');
-
-          if (sec && sec.style.display !== 'none') {
-              sec.style.display = 'none';
-              if (iframe) iframe.src = 'about:blank'; // ভিডিও বন্ধ করবে
-              isAipVideoLoaded = false;
-          }
-
-          // বাটন টেক্সট ও লাল কালার আগের অবস্থায় রিসেট করবে (NEW UPDATE)
-          if (btn) {
-              btn.innerHTML = '<i class="fa-brands fa-youtube"></i> <span>কিভাবে করবেন ভিডিও দেখুন!</span>';
-              btn.style.background = 'linear-gradient(135deg, #cc0000, #ff0000)';
-          }
-      }
-  }
+  
