@@ -79,201 +79,54 @@
   }
 
   // =========================================================================
-  // PRO 4-STAGE BANGLADESH EC HYBRID PDF TO UNICODE BENGALI DECODER
-  // Handles VOXLMY+Bangla / NikoshBAN / SutonnyOMJ + Standard Unicode PDFs
+  // PRO BANGLADESH EC HYBRID PDF TO UNICODE BENGALI DECODER
   // =========================================================================
-  const VLF_BIJOY_DETECT_RE = /[ÏÐÎËƣƤƀƁƂƃƄƅƆſŇĺ×ĢĤĥĦħĨĩİįĴļĽłńŅŋŏŐŌŒŔŘřśŝŞšŢŨũŪūŬŮůűųŴŽžƏƎĀăēĔėęĐŮĳîŌÔèêúÖÝŅÿåÙ]|িপতা|িঠকানা|Ïভাটার|বাংলােদশ/;
+  const VLF_BIJOY_DETECT_RE = /[ÏÐÎËƣƤƀƁƂƃƄƅƆſŇĺ×ĢĤĥĦħĨĩİįĴļĽłńŅŋŏŐŌŒŔŘřśŝŞšŢŨũŪūŬŮůűųŴŽžƏƎĀăēĔėęĐŮĳîŌÔèêúÖÝŅÿåÙ]|িপতা|িঠকানা|Ïভাটার|বাংলােদশ|(?:^|[\s:ঃ,.])([িেৈ])[ক-হড়ঢ়য়]/;
 
   const VLF_BIJOY_CHAR_MAP = {
-      'Ï': 'ে',
-      'Ð': 'ৈ',
-      'Î': '\uE001', // Reph placeholder
-      'Ë': '্য',
-
-      // ক-series
-      'Ñ': 'ক্ক',
-      'Ò': 'ক্ট',
-      'Ó': 'ক্ট্র',
-      'Ô': 'ক্স',
-      'Õ': 'ক্ল',
-      'Ö': 'ক্ল',
-      '×': 'ক্ত',
-      'Ø': 'ক্ত্র',
-      'Ù': 'ক্ষ',
-      'Ú': 'ক্ষ্ম',
-      'Û': 'ক্য',
-      'Ü': 'ক্র',
-      'Ý': 'ক্ব',
-      'Þ': 'ক্ম',
-
-      // গ-ঙ-চ-জ-ঞ-series
-      'å': 'গ্র',
-      'æ': 'গ্ল',
-      'ç': 'গ্ধ',
-      'è': 'ঙ্ক',
-      'é': 'ঙ্খ',
-      'ê': 'ঙ্গ',
-      'ë': 'ঙ্ঘ',
-      'î': 'চ্চ',
-      'ï': 'চ্ছ',
-      'ð': 'চ্ছ্ব',
-      'õ': 'জ্জ',
-      'ö': 'জ্জ্ব',
-      '÷': 'জ্ঝ',
-      'ø': 'জ্ঞ',
-      'ù': 'জ্ব',
-      'ú': 'জ্ব',
-      'û': 'ঞ্চ',
-      'ü': 'ঞ্ছ',
-      'ý': 'ঞ্জ',
-      'þ': 'ঞ্ঝ',
-
-      // ট-ড-ণ-ত-দ-ধ-series
-      'ÿ': 'ট্ট',
-      'Ā': 'ট্র',
-      'ā': 'ড্ড',
-      'Ă': 'ড্র',
-      'ă': 'ড্র',
-      'Ą': 'ণ্ট',
-      'ą': 'ণ্ঠ',
-      'Ć': 'ণ্ড',
-      'ć': 'ণ্ণ',
-      'Č': 'ণ্ম',
-      'Đ': 'ত্ন',
-      'đ': 'ত্ব',
-      'Ē': 'ত্ম',
-      'ē': 'ত্ত',
-      'Ĕ': 'ত্র',
-      'ĕ': 'ত্ব',
-      'Ė': 'দ্গ',
-      'ė': 'দ্দ',
-      'Ę': 'দ্ধ',
-      'ę': 'দ্র',
-      'Ě': 'দ্ব',
-      'ě': 'দ্ম',
-
-      // ন-series
-      'Ģ': 'ন্ত',
-      'ģ': 'ন্থ',
-      'Ĥ': 'ন্দ',
-      'ĥ': 'ন্ম',
-      'Ħ': 'ন্ধ',
-      'ħ': 'ন্দ্র',
-      'Ĩ': 'ন্ন',
-      'ĩ': 'ন্স',
-      'Ī': 'ন্তু',
-      'ī': 'ন্ত্র',
-      'Ĭ': 'ন্ধ্র',
-      'į': 'ন্য',
-
-      // প-ফ-ব-ভ-ম-ল-series
-      'İ': 'প্ত',
-      'ı': 'প্প',
-      'Ĳ': 'প্ল',
-      'ĳ': 'প্ন',
-      'Ĵ': 'প্র',
-      'ĵ': 'প্স',
-      'Ķ': 'ফ্ল',
-      'ķ': 'ব্জ',
-      'ĺ': 'ব্দ',
-      'Ļ': 'ব্ধ',
-      'ļ': 'ব্ব',
-      'Ľ': 'ব্র',
-      'ľ': 'ব্ল',
-      'Ŀ': 'ভ্র',
-      'ŀ': 'ম্ন',
-      'Ł': 'ম্প্র',
-      'ł': 'ম্প',
-      'Ń': 'ম্ফ',
-      'ń': 'ম্ব',
-      'Ņ': 'ম্ভ',
-      'ņ': 'ম্ভ্র',
-      'Ň': 'ম্ম',
-      'ň': 'ম্ল',
-      'ŉ': 'ল্ক',
-      'Ŋ': 'ল্গ',
-      'ŋ': 'ল্ট',
-      'Ō': 'ল্ল',
-      'ō': 'ল্ব',
-      'Ŏ': 'ল্ফ',
-      'ŏ': 'ল্ড',
-      'Ő': 'ল্প',
-      'ő': 'ল্ম',
-
-      // শ-ষ-স-হ-series
-      'Ŕ': 'শ্চ',
-      'ŕ': 'শ্ছ',
-      'Ŗ': 'শ্ন',
-      'ŗ': 'শ্ম',
-      'Ř': 'শ্র',
-      'ř': 'শ্য',
-      'Ś': 'শ্ল',
-      'ś': 'শ্ব',
-      'Ŝ': 'ষ্ক',
-      'ŝ': 'ষ্ণ',
-      'ş': 'ষ্ঠ',
-      'Š': 'ষ্ম',
-      'š': 'ষ্প',
-      'Ţ': 'স্ট',
-      'ţ': 'ষ্ফ',
-      'Ť': 'স্ক',
-      'ť': 'স্খ',
-      'Ŧ': 'স্ট',
-      'ŧ': 'স্ট',
-      'Ũ': 'স্ট',
-      'ũ': 'স্ত',
-      'Ū': 'স্থ',
-      'ū': 'স্ন',
-      'Ŭ': 'স্প',
-      'ŭ': 'স্ফ',
-      'Ů': 'স্ব',
-      'ů': 'স্ম',
-      'Ű': 'স্র',
-      'ű': 'স্ত্র',
-      'Ų': 'স্ল',
-      'ų': 'স্য',
-      'Ŵ': 'স্ট্র',
-      'ŵ': 'হ্ন',
-      'Ŷ': 'হ্ম',
-      'ŷ': 'হ্ল',
-
-      // উ/ঊ/ঋ-কার যুক্তবর্ণ
-      'Ž': 'গু',
-      'ž': 'ন্তু',
-      'ſ': 'নু',
-      'ƀ': 'সু',
-      'Ɓ': 'রু',
-      'Ƃ': 'রূ',
-      'ƃ': 'দু',
-      'Ƅ': 'শু',
-      'ƅ': 'হৃ',
-      'Ɔ': 'হু',
-      'Ǝ': 'স্তু',
-      'Ə': 'ন্দু',
-      'ƣ': 'কু',
-      'Ƥ': 'কু'
+      'Ï': 'ে', 'Ð': 'ৈ', 'Î': '\uE001', 'Ë': '্য',
+      'Ñ': 'ক্ক', 'Ò': 'ক্ট', 'Ó': 'ক্ট্র', 'Ô': 'ক্স', 'Õ': 'ক্ল', 'Ö': 'ক্ল',
+      '×': 'ক্ত', 'Ø': 'ক্ত্র', 'Ù': 'ক্ষ', 'Ú': 'ক্ষ্ম', 'Û': 'ক্য', 'Ü': 'ক্র', 'Ý': 'ক্ব', 'Þ': 'ক্ম',
+      'å': 'গ্র', 'æ': 'গ্ল', 'ç': 'গ্ধ', 'è': 'ঙ্ক', 'é': 'ঙ্খ', 'ê': 'ঙ্গ', 'ë': 'ঙ্ঘ',
+      'î': 'চ্চ', 'ï': 'চ্ছ', 'ð': 'চ্ছ্ব', 'õ': 'জ্জ', 'ö': 'জ্জ্ব', '÷': 'জ্ঝ', 'ø': 'জ্ঞ', 'ù': 'জ্ব', 'ú': 'জ্ব',
+      'û': 'ঞ্চ', 'ü': 'ঞ্ছ', 'ý': 'ঞ্জ', 'þ': 'ঞ্ঝ',
+      'ÿ': 'ট্ট', 'Ā': 'ট্র', 'ā': 'ড্ড', 'Ă': 'ড্র', 'ă': 'ড্র',
+      'Ą': 'ণ্ট', 'ą': 'ণ্ঠ', 'Ć': 'ণ্ড', 'ć': 'ণ্ণ', 'Č': 'ণ্ম',
+      'Đ': 'ত্ন', 'đ': 'ত্ব', 'Ē': 'ত্ম', 'ē': 'ত্ত', 'Ĕ': 'ত্র', 'ĕ': 'ত্ব',
+      'Ė': 'দ্গ', 'ė': 'দ্দ', 'Ę': 'দ্ধ', 'ę': 'দ্র', 'Ě': 'দ্ব', 'ě': 'দ্ম',
+      'Ģ': 'ন্ত', 'ģ': 'ন্থ', 'Ĥ': 'ন্দ', 'ĥ': 'ন্ম', 'Ħ': 'ন্ধ', 'ħ': 'ন্দ্র',
+      'Ĩ': 'ন্ন', 'ĩ': 'ন্স', 'Ī': 'ন্তু', 'ī': 'ন্ত্র', 'Ĭ': 'ন্ধ্র', 'į': 'ন্য',
+      'İ': 'প্ত', 'ı': 'প্প', 'Ĳ': 'প্ল', 'ĳ': 'প্ন', 'Ĵ': 'প্র', 'ĵ': 'প্স',
+      'Ķ': 'ফ্ল', 'ķ': 'ব্জ', 'ĺ': 'ব্দ', 'Ļ': 'ব্ধ', 'ļ': 'ব্ব', 'Ľ': 'ব্র', 'ľ': 'ব্ল', 'Ŀ': 'ভ্র',
+      'ŀ': 'ম্ন', 'Ł': 'ম্প্র', 'ł': 'ম্প', 'Ń': 'ম্ফ', 'ń': 'ম্ব', 'Ņ': 'ম্ভ', 'ņ': 'ম্ভ্র', 'Ň': 'ম্ম', 'ň': 'ম্ল',
+      'ŉ': 'ল্ক', 'Ŋ': 'ল্গ', 'ŋ': 'ল্ট', 'Ō': 'ল্ল', 'ō': 'ল্ব', 'Ŏ': 'ল্ফ', 'ŏ': 'ল্ড', 'Ő': 'ল্প', 'ő': 'ল্ম',
+      'Ŕ': 'শ্চ', 'ŕ': 'শ্ছ', 'Ŗ': 'শ্ন', 'ŗ': 'শ্ম', 'Ř': 'শ্র', 'ř': 'শ্য', 'Ś': 'শ্ল', 'ś': 'শ্ব',
+      'Ŝ': 'ষ্ক', 'ŝ': 'ষ্ণ', 'ş': 'ষ্ঠ', 'Š': 'ষ্ম', 'š': 'ষ্প',
+      'Ţ': 'স্ট', 'ţ': 'ষ্ফ', 'Ť': 'স্ক', 'ť': 'স্খ', 'Ŧ': 'স্ট', 'ŧ': 'স্ট', 'Ũ': 'স্ট', 'ũ': 'স্ত',
+      'Ū': 'স্থ', 'ū': 'স্ন', 'Ŭ': 'স্প', 'ŭ': 'স্ফ', 'Ů': 'স্ব', 'ů': 'স্ম',
+      'Ű': 'স্র', 'ű': 'স্ত্র', 'Ų': 'স্ল', 'ų': 'স্য', 'Ŵ': 'স্ট্র',
+      'ŵ': 'হ্ন', 'Ŷ': 'হ্ম', 'ŷ': 'হ্ল',
+      'Ž': 'গু', 'ž': 'ন্তু', 'ſ': 'নু', 'ƀ': 'সু', 'Ɓ': 'রু', 'Ƃ': 'রূ', 'ƃ': 'দু', 'Ƅ': 'শু',
+      'ƅ': 'হৃ', 'Ɔ': 'হু', 'Ǝ': 'স্তু', 'Ə': 'ন্দু', 'ƣ': 'কু', 'Ƥ': 'কু'
   };
 
-  // Stage 3 + Stage 4: Full-Line Hybrid Bijoy Converter + Bengali Integrity Polisher
   function convertEcBijoyToUnicode(rawLine) {
       if (!rawLine) return '';
       let s = rawLine.normalize('NFC');
 
-      // Context-aware 'Œ' (prevents broken hasanta in মঞ্জু, টাঙ্কি, ক্যান্টনমেন্ট, স্ট্যান্ড)
+      // Context-aware 'Œ' & 'Ş'
       s = s.replace(/Œ(?=[ýû])/g, '');
       s = s.replace(/Œ([জচছঝ])/g, 'ঞ্$1');
       s = s.replace(/Œ([কখগঘ])/g, 'ঙ্$1');
       s = s.replace(/Œ/g, 'ন্');
 
-      // Context-aware 'Ş' (স্ট in স্ট্যান্ড/পোস্ট/ইস্ট/মাস্টার, ষ্ট in অষ্টমী/বৃষ্টি/কৃষ্ট)
       s = s.replace(/Ş(?=[Ëাীে]|েকাড)/g, 'স্ট');
       s = s.replace(/(ই|মা|Ïপা)Ş/g, '$1স্ট');
       s = s.replace(/Ş/g, 'ষ্ট');
 
-      // Handle dotted-circle r-ya-phala artifacts (e.g. র◌্যালী -> র‍্যালী)
+      // Dotted-circle r-ya-phala artifacts
       s = s.replace(/র\u25CC্যা/g, 'র\u200D্যা').replace(/রে\u25CC/g, 'র\u200D্যে').replace(/\u25CC/g, '');
 
-      // Replace all hybrid Latin-Extended conjuncts
       let out = '';
       for (let i = 0; i < s.length; i++) {
           const ch = s[i];
@@ -281,20 +134,19 @@
       }
       s = out.normalize('NFC');
 
-      // Remove stray spaces between pre-base kar and following consonant BEFORE reordering
-      s = s.replace(/([িেৈ])\s+([ক-হড়ঢ়য়ৎ])/g, '$1$2');
-      // Remove stray spaces before post-base combining marks / reph / ya-phala
-      s = s.replace(/\s+([\uE001াীুূৃৗংঃঁ্]|্য)/g, '$1');
+      // Repair decomposed nukta & অ+া
+      s = s.replace(/য\u09BC/g, 'য়').replace(/ড\u09BC/g, 'ড়').replace(/ঢ\u09BC/g, 'ঢ়').replace(/অা/g, 'আ');
 
-      // Move chandra-bindu placed before vowel sign (কঁাচা -> কাঁচা)
+      // Remove stray spaces adjacent to pre-base/combining marks BEFORE reordering
+      s = s.replace(/([িেৈ])\s+([ক-হড়ঢ়য়ৎ])/g, '$1$2');
+      s = s.replace(/\s+([\uE001াীুূৃৗংঃঁ্]|্য)/g, '$1');
       s = s.replace(/ঁ([ািীুূৃেৈোৌ])/g, '$1ঁ');
 
-      // Reorder pre-base vowels (ি, ে, ৈ) after complete Bengali consonant cluster (including nukta & ZWJ)
+      // Reorder pre-base vowels (ি, ে, ৈ) after complete consonant cluster
       const cluster = '([ক-হড়ঢ়য়ৎ]\u09BC?(?:[\u200C\u200D]?্[\u200C\u200D]?[ক-হড়ঢ়য়ৎ]\u09BC?)*)';
       const preBaseRe = new RegExp('([িেৈ])' + cluster, 'g');
       s = s.replace(preBaseRe, '$2$1');
 
-      // Combine split ে + া => ো and ে + ৗ => ৌ
       s = s.replace(/ে\s*া/g, 'ো').replace(/ে\s*ৗ/g, 'ৌ');
 
       // Reorder post-base Reph (\uE001) BEFORE preceding consonant cluster + vowel sign
@@ -302,15 +154,17 @@
       s = s.replace(rephRe, 'র্$1');
       s = s.replace(/\uE001/g, 'র্');
 
-      // Final Bengali Integrity Polish (Zero Broken Words)
       return polishBengaliText(s);
   }
 
-  // Final sanitizer for BOTH Legacy & Unicode PDFs
   function polishBengaliText(s) {
       if (!s) return '';
       return s
           .normalize('NFC')
+          .replace(/য\u09BC/g, 'য়')
+          .replace(/ড\u09BC/g, 'ড়')
+          .replace(/ঢ\u09BC/g, 'ঢ়')
+          .replace(/অা/g, 'আ')
           .replace(/ে\s*া/g, 'ো')
           .replace(/ে\s*ৗ/g, 'ৌ')
           .replace(/ঁ([ািীুূৃেৈোৌ])/g, '$1ঁ')
@@ -323,26 +177,79 @@
           .trim();
   }
 
-  // Normalize text for super-tolerant Bangla & English searching
+  // =========================================================================
+  // 3-TIER ULTRA-SMART BANGLA NORMALIZER & PHONETIC SEARCH ENGINE
+  // =========================================================================
+
+  // Tier 1: Clean Standard Normalization (Spelling-tolerant, keeps vowels)
   function vlfNormalizeForSearch(str) {
       if (!str) return '';
-      return vlfToBanglaNum(str.toLowerCase())
-          .replace(/আক্তার/g, 'আকতার')
+      return vlfToBanglaNum(str.normalize('NFC').toLowerCase())
+          .replace(/য\u09BC/g, 'য়').replace(/ড\u09BC/g, 'ড়').replace(/ঢ\u09BC/g, 'ঢ়').replace(/অা/g, 'আ')
+          .replace(/আক্তার|আখতার/g, 'আকতার')
+          .replace(/জ্যোৎস্না|জোৎস্না|জ্যোস্না|জোসনা/g, 'জোসনা')
           .replace(/স্ট/g, 'ষ্ট')
           .replace(/ঈ/g, 'ই')
           .replace(/ী/g, 'ি')
           .replace(/ঊ/g, 'উ')
           .replace(/ূ/g, 'ু')
-          .replace(/ণ/g, 'ন')
-          .replace(/[শষ]/g, 'স')
+          .replace(/[ণঞ]/g, 'ন')
+          .replace(/ং/g, 'ঙ')
+          .replace(/[শষছ]/g, 'স')
           .replace(/[ড়ঢ়ড়ঢ়]/g, 'র')
           .replace(/য়/g, 'য')
           .replace(/ৎ/g, 'ত')
           .replace(/[ঃঁ্\u200C\u200D]/g, '')
-          .replace(/[,\.\-\/\\:;|()]/g, ' ')
+          .replace(/[,\.\-\/\\:;|()'"]/g, ' ')
           .replace(/\s+/g, ' ')
           .trim();
   }
+
+  // Tier 2: Bangladeshi Phonetic Skeleton (Matches রহিমা/রাহিমা, আয়েশা/আয়শা,
+  // শাহনাজ/শাহানাজ, জাহাঙ্গীর/জাহাংগীর, আহমেদ/আহমদ/আহম্মদ, রেহানা/রেহেনা, সখিনা/সকিনা, etc.)
+  function vlfPhoneticKey(str) {
+      if (!str) return '';
+      let s = vlfToBanglaNum(str.normalize('NFC').toLowerCase())
+          .replace(/য\u09BC/g, 'য়').replace(/ড\u09BC/g, 'ড়').replace(/ঢ\u09BC/g, 'ঢ়').replace(/অা/g, 'আ')
+          .replace(/আক্তার|আখতার|আকতার/g, 'আকতর')
+          .replace(/জ্যোৎস্না|জোৎস্না|জ্যোস্না|জোসনা/g, 'জসন')
+          .replace(/মোহাম্মদ|মুহাম্মদ|মহাম্মদ|মোহম্মদ/g, 'মহমদ')
+          .replace(/আহমেদ|আহমদ|আহম্মদ|আহাম্মদ|আহেম্মেদ|আহাম্মেদ/g, 'আহমদ')
+          .replace(/[শষছ]/g, 'স')
+          .replace(/[ণঞঙং]/g, 'ন')
+          .replace(/[ড়ঢ়ড়ঢ়]/g, 'র')
+          .replace(/খ/g, 'ক')
+          .replace(/[থৎ]/g, 'ত')
+          .replace(/ধ/g, 'দ')
+          .replace(/ভ/g, 'ব')
+          .replace(/ফ/g, 'প')
+          .replace(/ঘ/g, 'গ')
+          .replace(/ঝ/g, 'জ')
+          .replace(/ঠ/g, 'ট')
+          .replace(/ঢ/g, 'ড')
+          .replace(/ঈ/g, 'ই')
+          .replace(/ঊ/g, 'উ')
+          .replace(/ঐ/g, 'এ')
+          .replace(/ঔ/g, 'ও')
+          .replace(/[ঃঁ্\u200C\u200D]/g, '')
+          .replace(/[,\.\-\/\\:;|()'"]/g, ' ');
+
+      // Keep digits untouched; strip variable internal vowel signs (কার) & semivowels (য়/য-ফলা) per word
+      const words = s.split(/\s+/).filter(Boolean).map(w => {
+          if (/[০-৯]/.test(w)) return w; // Strict digits for voter no / DOB / serial
+          let p = w.replace(/[ািীুূৃেৈোৌ]/g, '').replace(/য়/g, '');
+          // Collapse duplicate consecutive letters (ম্ম->ম, ন্ন->ন, দ্দ->দ, ল্ল->ল)
+          p = p.replace(/(.)\1+/g, '$1');
+          return p || w;
+      });
+      return words.join(' ').trim();
+  }
+
+  // Common Optional Title Prefixes in Bangladeshi Voter Names
+  const VLF_OPTIONAL_TITLES = new Set([
+      'মো', 'মোহামমদ', 'মুহামমদ', 'মোসা', 'মোসামমত', 'মোসামমদ',
+      'মৃত', 'মৃতা', 'হাজি', 'আলহাজ', 'আলহাজব', 'স্রি', 'স্রিমতি', 'জনাব'
+  ]);
 
   // =========================================================================
   // SUB-PIXEL LINE RECONSTRUCTION (JOINS FRAGMENTED PDF GLYPHS BEFORE DECODING)
@@ -350,13 +257,11 @@
   function reconstructLinesFromRawItems(rawItems, isBijoy) {
       if (!rawItems || rawItems.length === 0) return [];
 
-      // Sort top-to-bottom (descending Y), then left-to-right (ascending X)
       const sorted = rawItems.slice().sort((a, b) => {
           if (Math.abs(b.y - a.y) > 4.2) return b.y - a.y;
           return a.x - b.x;
       });
 
-      // Cluster into visual lines
       const rawLines = [];
       let curLine = [];
       let curY = null;
@@ -374,7 +279,6 @@
       }
       if (curLine.length > 0) rawLines.push(curLine);
 
-      // Reconstruct each line using exact X-gap geometry BEFORE Unicode conversion
       const finalLines = [];
       for (let l = 0; l < rawLines.length; l++) {
           const lineItems = rawLines[l].sort((a, b) => a.x - b.x);
@@ -386,7 +290,6 @@
               const it = lineItems[j];
               if (!it.str) continue;
 
-              // Explicit whitespace item in PDF stream
               if (it.str.trim() === '') {
                   pendingSpace = true;
                   continue;
@@ -405,12 +308,10 @@
                   const curStartsJoiner = /^[ÎËাীুূৃৗংঃঁ্]/.test(trimmed);
 
                   if ((prevEndsJoiner || curStartsJoiner) && gap < fs * 0.75) {
-                      // Never insert space between combining/pre-base mark and its letter
                       lineStr += trimmed;
                   } else if (pendingSpace || prev.hasTrailSpace || hasLeadSpace || gap > Math.max(1.85, fs * 0.22)) {
                       lineStr += ' ' + trimmed;
                   } else {
-                      // Same word fragmented by PDF kerning -> concatenate tightly!
                       lineStr += trimmed;
                   }
               }
@@ -420,7 +321,6 @@
           }
 
           if (lineStr.trim() !== '') {
-              // Auto-check per-line or per-file whether Bijoy decoding is needed
               const needsBijoy = isBijoy || VLF_BIJOY_DETECT_RE.test(lineStr);
               const decoded = needsBijoy ? convertEcBijoyToUnicode(lineStr) : polishBengaliText(lineStr);
               if (decoded) finalLines.push(decoded);
@@ -470,7 +370,6 @@
                   publishDate: ''
               };
 
-              let isBijoyPdf = null;
               let fileVotersCount = 0;
 
               for (let pNum = 1; pNum <= numPages; pNum++) {
@@ -483,7 +382,7 @@
                   const viewport = page.getViewport({ scale: 1.0 });
                   const textContent = await page.getTextContent();
 
-                  // Filter out rotated watermark items (diagonal "চূড়ান্ত ভোটার তালিকা"), keep spaces for gap tracking
+                  // Filter out rotated watermark items (diagonal "চূড়ান্ত ভোটার তালিকা")
                   const rawItems = [];
                   for (let k = 0; k < textContent.items.length; k++) {
                       const it = textContent.items[k];
@@ -500,23 +399,18 @@
                       });
                   }
 
-                  // Auto-detect Bijoy legacy encoding from first non-empty page
-                  if (isBijoyPdf === null && rawItems.length > 0) {
-                      const sample = rawItems.map(i => i.str).join('');
-                      isBijoyPdf = VLF_BIJOY_DETECT_RE.test(sample);
-                  }
+                  // Detect Bijoy encoding PER PAGE (prevents Page 1 cover from locking inner pages!)
+                  const pageSample = rawItems.map(i => i.str).join(' ');
+                  const isBijoyPage = VLF_BIJOY_DETECT_RE.test(pageSample);
 
-                  // Page 1 Cover Metadata Extraction
                   if (pNum === 1) {
-                      extractVlfMetaFromPage(rawItems, isBijoyPdf, fileMeta);
+                      extractVlfMetaFromPage(rawItems, isBijoyPage, fileMeta);
                   }
 
-                  // Extract voters with sub-pixel line reconstruction
-                  const pageVoters = extractVotersFromPage(rawItems, isBijoyPdf, viewport.width, viewport.height, pNum, fileId, file.name, fileMeta);
+                  const pageVoters = extractVotersFromPage(rawItems, isBijoyPage, viewport.width, viewport.height, pNum, fileId, file.name, fileMeta);
 
-                  // Backup metadata from page 2 header
                   if (pNum === 2) {
-                      extractVlfHeaderMeta(rawItems, isBijoyPdf, viewport.height, fileMeta);
+                      extractVlfHeaderMeta(rawItems, isBijoyPage, viewport.height, fileMeta);
                   }
 
                   if (pageVoters.length > 0) {
@@ -526,7 +420,6 @@
                       fileVotersCount += pageVoters.length;
                   }
 
-                  // Yield to UI thread every 3 pages
                   if (pNum % 3 === 0) {
                       await new Promise(r => setTimeout(r, 0));
                   }
@@ -552,7 +445,6 @@
       }
   }
 
-  // Extract Metadata from Cover Page (Page 1)
   function extractVlfMetaFromPage(rawItems, isBijoy, meta) {
       const lines = reconstructLinesFromRawItems(rawItems, isBijoy);
       const text = lines.join('\n');
@@ -573,7 +465,6 @@
       if (codeM && !meta.areaCode) meta.areaCode = codeM[1].trim();
   }
 
-  // Extract Header Metadata from Page 2+ top strip
   function extractVlfHeaderMeta(rawItems, isBijoy, pageH, meta) {
       const topItems = rawItems.filter(it => it.y > pageH * 0.78);
       const text = reconstructLinesFromRawItems(topItems, isBijoy).join(' ');
@@ -594,26 +485,28 @@
       if (codeM && !meta.areaCode) meta.areaCode = codeM[1].trim();
   }
 
-  // Spatial Multi-Column Voter Box Extractor (Preserves Raw Fragments until Line Assembly!)
+  // Bulletproof Spatial Multi-Column Voter Box Extractor
   function extractVotersFromPage(rawItems, isBijoy, pageW, pageH, pageNum, fileId, fileName, fileMeta) {
-      // Find serial start markers in raw items (serial numbers are digits + dot)
-      const serialItems = rawItems.filter(it => /^\s*[০-৯0-9]{3,5}\./.test(it.str));
-      if (serialItems.length === 0) return [];
+      // Detect voter-grid anchors even if serial & dot were split into separate items
+      const serialItems = rawItems.filter(it => /^\s*[০-৯0-9]{3,5}\.?/.test(it.str));
+      const vnoItems = rawItems.filter(it => /(?:ভোটার|Ïভাটার)\s*নং/.test(it.str));
+      if (serialItems.length === 0 && vnoItems.length === 0) return [];
 
+      // Determine grid top Y safely (never clips Row 1!)
       let maxGridY = 0;
       serialItems.forEach(it => { if (it.y > maxGridY) maxGridY = it.y; });
+      vnoItems.forEach(it => { if (it.y + 24 > maxGridY) maxGridY = it.y + 24; });
 
-      // Detect left edges of columns dynamically using "ভোটার নং" / "Ïভাটার নং" OR serial anchors
-      const vnoAnchors = rawItems
-          .filter(it => /(?:ভোটার|Ïভাটার)\s*নং/.test(it.str) || /^\s*[০-৯0-9]{3,5}\.\s*(?:নাম|ি|Ï)?/.test(it.str))
-          .map(it => it.x);
+      // Use abundant left-aligned field labels to lock exact column left edges
+      const leftAnchorItems = rawItems.filter(it =>
+          /(?:ভোটার|Ïভাটার)\s*নং|(?:পিতা|িপতা)\s*[:ঃ]|মাতা\s*[:ঃ]|(?:ঠিকানা|িঠকানা)\s*[:ঃ]/.test(it.str)
+      );
 
       let colStarts = [];
-      if (vnoAnchors.length > 0) {
-          vnoAnchors.sort((a, b) => a - b);
-          // Only cluster left-aligned column starts (skip centered migrated serials by requiring >= 2 hits or wide spacing)
+      if (leftAnchorItems.length > 0) {
+          const xs = leftAnchorItems.map(it => it.x).sort((a, b) => a - b);
           const clusters = [];
-          vnoAnchors.forEach(x => {
+          xs.forEach(x => {
               const found = clusters.find(c => Math.abs(c.avg - x) < pageW * 0.08);
               if (found) {
                   found.sum += x;
@@ -623,7 +516,6 @@
                   clusters.push({ sum: x, cnt: 1, avg: x });
               }
           });
-          // Pick top clusters (at least 2 anchors if available)
           const strong = clusters.filter(c => c.cnt >= 2).sort((a, b) => a.avg - b.avg);
           colStarts = (strong.length >= 2 ? strong : clusters.sort((a, b) => a.avg - b.avg)).map(c => c.avg);
       }
@@ -632,20 +524,17 @@
           colStarts = [pageW * 0.08, pageW * 0.36, pageW * 0.64];
       }
 
-      // Compute column split boundaries
       const boundaries = [];
       for (let i = 1; i < colStarts.length; i++) {
           boundaries.push(colStarts[i] - 12);
       }
 
-      // Filter only grid items (below top page header, above bottom page number/footer)
       const gridItems = rawItems.filter(it => {
           if (it.y > maxGridY + 14) return false;
           if (it.y < 32 && (/^\s*[০-৯0-9]{1,3}\s*$/.test(it.str) || /অিফসার|অফিসার/.test(it.str))) return false;
           return true;
       });
 
-      // Bucket raw items into columns
       const numCols = boundaries.length + 1;
       const colBuckets = Array.from({ length: numCols }, () => []);
       gridItems.forEach(it => {
@@ -658,16 +547,15 @@
 
       const parsedVoters = [];
 
-      // Reconstruct complete decoded lines per column, then split into voter cards
       colBuckets.forEach(colItems => {
           const lines = reconstructLinesFromRawItems(colItems, isBijoy);
-          let blocks = [];
+          const blocks = [];
           let currentBlock = null;
 
           lines.forEach(line => {
               if (/^রেজিস্ট্রেশন\s*অফিসার/.test(line) || /^[০-৯0-9]{1,3}$/.test(line)) return;
 
-              if (/^[০-৯0-9]{3,5}\./.test(line)) {
+              if (/^[০-৯0-9]{3,5}\s*\./.test(line)) {
                   if (currentBlock) blocks.push(currentBlock);
                   currentBlock = [line];
               } else if (currentBlock) {
@@ -686,10 +574,10 @@
       return parsedVoters;
   }
 
-  // Parse one voter cell's clean Unicode lines into structured object
+  // Parse one voter cell's clean Unicode lines into structured object with 3-tier search indexes
   function parseSingleVoterBlock(lines, pageNum, fileId, fileName, fileMeta) {
       const fullText = lines.join('\n').replace(/রেজিস্ট্রেশন\s*অফিসার.*$/g, '').trim();
-      const serialMatch = fullText.match(/^([০-৯0-9]{3,5})\./);
+      const serialMatch = fullText.match(/^([০-৯0-9]{3,5})\s*\./);
       if (!serialMatch) return null;
 
       const serial = serialMatch[1];
@@ -714,17 +602,7 @@
               address: '-',
               meta: fileMeta
           };
-          migratedObj.searchAll = vlfNormalizeForSearch(serial + ' মাইগ্রেট হয়েছে');
-          migratedObj.searchFields = {
-              name: vlfNormalizeForSearch('মাইগ্রেট হয়েছে'),
-              voterNo: '',
-              serial: vlfNormalizeForSearch(serial),
-              father: '',
-              mother: '',
-              dob: '',
-              address: '',
-              profession: ''
-          };
+          buildVlfVoterIndexes(migratedObj, fullText);
           return migratedObj;
       }
 
@@ -734,8 +612,15 @@
           return m ? polishBengaliText(m[1]) : '';
       };
 
-      const name = extract(/নাম\s*[:ঃ]\s*([^\n]+?)(?=\s*\n|\s*ভোটার\s*নং|$)/);
-      const voterNo = extract(/ভোটার\s*নং\s*[:ঃ]\s*([০-৯0-9]+)/);
+      let name = extract(/নাম\s*[:ঃ]\s*([^\n]+?)(?=\s*\n|\s*ভোটার\s*নং|$)/);
+      // Fallback if "নাম:" had an unusual symbol
+      if (!name) {
+          const firstLine = lines[0] || '';
+          const fallbackName = firstLine.replace(/^[০-৯0-9]{3,5}\s*\.\s*(?:নাম\s*[:ঃ]?\s*)?/, '').trim();
+          if (fallbackName && !/ভোটার\s*নং/.test(fallbackName)) name = polishBengaliText(fallbackName);
+      }
+
+      const voterNo = extract(/ভোটার\s*নং\s*[:ঃ]?\s*([০-৯0-9]+)/);
       const father = extract(/পিতা\s*[:ঃ]\s*([^\n]+?)(?=\s*\n|\s*মাতা\s*[:ঃ]|$)/);
       const mother = extract(/মাতা\s*[:ঃ]\s*([^\n]+?)(?=\s*\n|\s*পেশা\s*[:ঃ]|$)/);
       const profession = extract(/পেশা\s*[:ঃ]\s*([^,\n]+?)(?=,|\s*জন্ম\s*তারিখ|\s*\n|$)/);
@@ -769,19 +654,44 @@
           meta: fileMeta
       };
 
-      voter.searchFields = {
-          name: vlfNormalizeForSearch(voter.name),
-          voterNo: vlfNormalizeForSearch(voter.voterNo),
-          serial: vlfNormalizeForSearch(voter.serial),
-          father: vlfNormalizeForSearch(voter.father),
-          mother: vlfNormalizeForSearch(voter.mother),
-          dob: vlfNormalizeForSearch(voter.dob),
-          address: vlfNormalizeForSearch(voter.address),
-          profession: vlfNormalizeForSearch(voter.profession)
-      };
-      voter.searchAll = Object.values(voter.searchFields).join(' ');
-
+      buildVlfVoterIndexes(voter, fullText);
       return voter;
+  }
+
+  // Pre-compute Multi-Tier Search Indexes (Normalized + Spaceless + Phonetic)
+  function buildVlfVoterIndexes(voter, rawFullText) {
+      const fields = {
+          name: voter.name,
+          voterNo: voter.voterNo,
+          serial: voter.serial,
+          father: voter.father,
+          mother: voter.mother,
+          dob: voter.dob,
+          address: voter.address,
+          profession: voter.profession
+      };
+
+      voter.searchFields = {};
+      voter.compactFields = {};
+      voter.phoneticFields = {};
+      voter.phoneticCompactFields = {};
+
+      Object.keys(fields).forEach(k => {
+          const norm = vlfNormalizeForSearch(fields[k]);
+          const phon = vlfPhoneticKey(fields[k]);
+          voter.searchFields[k] = norm;
+          voter.compactFields[k] = norm.replace(/\s+/g, '');
+          voter.phoneticFields[k] = phon;
+          voter.phoneticCompactFields[k] = phon.replace(/\s+/g, '');
+      });
+
+      const rawNorm = vlfNormalizeForSearch(rawFullText);
+      const rawPhon = vlfPhoneticKey(rawFullText);
+
+      voter.searchAll = Object.values(voter.searchFields).join(' ') + ' ' + rawNorm;
+      voter.compactAll = voter.searchAll.replace(/\s+/g, '');
+      voter.phoneticAll = Object.values(voter.phoneticFields).join(' ') + ' ' + rawPhon;
+      voter.phoneticCompactAll = voter.phoneticAll.replace(/\s+/g, '');
   }
 
   // Update UI after PDF Parsing
@@ -844,7 +754,7 @@
       document.getElementById('vlfClearSubBtn').style.display = subVal ? 'flex' : 'none';
 
       clearTimeout(vlfState.searchTimer);
-      vlfState.searchTimer = setTimeout(runVlfFilter, 120);
+      vlfState.searchTimer = setTimeout(runVlfFilter, 100);
   }
 
   function clearVlfSearch(inputId) {
@@ -854,28 +764,104 @@
       if (el) el.focus();
   }
 
-  // Execute Search & Multi-Token Filter
+  // Score how well a query matches a voter's target field (0 = no match, higher = better match)
+  function scoreVlfQueryMatch(voter, rawQuery, field) {
+      if (!rawQuery) return 100;
+
+      const normFull = vlfNormalizeForSearch(rawQuery);
+      if (!normFull) return 100;
+
+      const targetNorm = (field === 'all') ? voter.searchAll : (voter.searchFields[field] || '');
+      const targetCompact = (field === 'all') ? voter.compactAll : (voter.compactFields[field] || '');
+      const targetPhon = (field === 'all') ? voter.phoneticAll : (voter.phoneticFields[field] || '');
+      const targetPhonCompact = (field === 'all') ? voter.phoneticCompactAll : (voter.phoneticCompactFields[field] || '');
+
+      const tokens = normFull.split(' ').filter(Boolean);
+      const compactQuery = normFull.replace(/\s+/g, '');
+
+      // Tier 1A: Exact phrase or all normalized tokens match
+      if (tokens.every(t => targetNorm.includes(t) || (t.length >= 3 && targetCompact.includes(t)))) {
+          if (targetNorm.startsWith(normFull)) return 120;
+          if (targetNorm.includes(normFull)) return 110;
+          return 100;
+      }
+
+      // Tier 1B: Spaceless full query match (e.g. "কামরুন্নাহার" <-> "কামরুন নাহার")
+      if (compactQuery.length >= 3 && targetCompact.includes(compactQuery)) {
+          return 95;
+      }
+
+      // Helper to test phonetic match for a token array
+      const matchPhoneticTokens = (toks) => {
+          const pToks = toks.map(t => vlfPhoneticKey(t)).filter(Boolean);
+          if (pToks.length === 0) return false;
+          return pToks.every(pt => {
+              if (/[০-৯]/.test(pt)) return targetNorm.includes(pt) || targetCompact.includes(pt);
+              if (pt.length < 2) return targetNorm.includes(pt);
+              return targetPhon.includes(pt) || (pt.length >= 3 && targetPhonCompact.includes(pt));
+          });
+      };
+
+      // Tier 2A: Phonetic match across all tokens (e.g. "হাসিনা" <-> "হাছিনা", "আয়েশা" <-> "আয়শা")
+      const rawTokens = rawQuery.trim().split(/\s+/).filter(Boolean);
+      if (matchPhoneticTokens(rawTokens)) {
+          return 75;
+      }
+
+      // Tier 2B: Spaceless phonetic match (e.g. "নুরজাহান" <-> "নূর জাহান" or "কামরুন নাহার" <-> "কামরুন্নাহার")
+      const phonCompactQuery = vlfPhoneticKey(rawQuery).replace(/\s+/g, '');
+      if (phonCompactQuery.length >= 3 && !/[০-৯]/.test(phonCompactQuery) && targetPhonCompact.includes(phonCompactQuery)) {
+          return 70;
+      }
+
+      // Tier 3: Optional Title-Prefix Stripping (e.g. "মোছাঃ নাজমা বেগম" matches "নাজমা বেগম")
+      if (tokens.length > 1) {
+          const coreTokens = tokens.filter(t => !VLF_OPTIONAL_TITLES.has(t));
+          if (coreTokens.length > 0 && coreTokens.length < tokens.length) {
+              if (coreTokens.every(t => targetNorm.includes(t) || (t.length >= 3 && targetCompact.includes(t)))) {
+                  return 65;
+              }
+              if (matchPhoneticTokens(coreTokens)) {
+                  return 55;
+              }
+          }
+      }
+
+      return 0;
+  }
+
+  // Execute Ranked Multi-Tier Search & Filter
   function runVlfFilter() {
       const rawMain = document.getElementById('vlfMainSearch').value.trim();
       const rawSub = document.getElementById('vlfSubSearch').value.trim();
       const field = document.getElementById('vlfFieldFilter').value;
 
-      const mainTokens = vlfNormalizeForSearch(rawMain).split(' ').filter(Boolean);
-      const subTokens = vlfNormalizeForSearch(rawSub).split(' ').filter(Boolean);
+      if (!rawMain && !rawSub) {
+          vlfState.filtered = vlfState.voters.slice();
+          vlfState.currentPage = 1;
+          renderVlfResults(rawMain, rawSub);
+          return;
+      }
 
-      vlfState.filtered = vlfState.voters.filter(v => {
-          const targetMain = (field === 'all') ? v.searchAll : (v.searchFields[field] || '');
-          for (let i = 0; i < mainTokens.length; i++) {
-              if (!targetMain.includes(mainTokens[i])) return false;
-          }
-          if (subTokens.length > 0) {
-              for (let j = 0; j < subTokens.length; j++) {
-                  if (!v.searchAll.includes(subTokens[j])) return false;
-              }
-          }
-          return true;
+      const scored = [];
+      for (let i = 0; i < vlfState.voters.length; i++) {
+          const v = vlfState.voters[i];
+          const s1 = scoreVlfQueryMatch(v, rawMain, field);
+          if (s1 === 0) continue;
+
+          const s2 = rawSub ? scoreVlfQueryMatch(v, rawSub, 'all') : 100;
+          if (s2 === 0) continue;
+
+          scored.push({ voter: v, score: s1 + s2 });
+      }
+
+      // Sort highest-relevance exact matches to the very top, then preserve serial order
+      scored.sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return a.voter.serialNum - b.voter.serialNum;
       });
 
+      vlfState.filtered = scored.map(item => item.voter);
       vlfState.currentPage = 1;
       renderVlfResults(rawMain, rawSub);
   }
@@ -919,7 +905,7 @@
           grid.innerHTML = `
             <div class="vlf-empty-box">
               <i class="fa-solid fa-user-slash" style="font-size:28px; color:#64748b; margin-bottom:8px; display:block;"></i>
-              দুঃখিত! আপনার দেওয়া তথ্যের সাথে মিলে এমন কোনো ভোটার পাওয়া যায়নি। বানান বা অংশবিশেষ দিয়ে আবার চেষ্টা করুন।
+              দুঃখিত! আপনার দেওয়া তথ্যের সাথে মিলে এমন কোনো ভোটার পাওয়া যায়নি। নামের একটি অংশ, পিতার নাম বা জন্মসাল দিয়ে চেষ্টা করুন।
             </div>`;
           pag.style.display = 'none';
           return;
